@@ -1,6 +1,7 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import styled from 'styled-components'
 import MainViewCard from "./assets/components/MainViewCard";
+import QuizzesList from "./assets/components/QuizzesList";
 
 function App() {
 
@@ -8,7 +9,7 @@ function App() {
     <AppContainer>
       <Routes>
         <Route path="/" element={<MainViewCard />}>
-          <Route index element={<p>Hello App</p>} />
+          <Route index element={<QuizzesList/>} />
         </Route>
       </Routes>
     </AppContainer>
