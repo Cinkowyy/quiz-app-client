@@ -1,4 +1,3 @@
-import { styled } from "styled-components";
 import MainCard from "../components/MainCard.styled";
 import Button from "../components/Button.styled";
 import { Form, Input, InputWrapper } from "../components/FormComponents.styled";
@@ -7,6 +6,7 @@ import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "../../api/axios";
+import ViewTitle from "../components/ViewTitle.styled";
 
 const registerSchema = z.object({
   nickname: z.string().min(3).max(24),
@@ -94,10 +94,3 @@ const RegisterView = () => {
 };
 
 export default RegisterView;
-
-const ViewTitle = styled.h1`
-  color: #555;
-  text-align: center;
-  font-size: 1.75rem;
-  font-weight: 500;
-`;

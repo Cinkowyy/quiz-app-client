@@ -1,4 +1,3 @@
-import { styled } from "styled-components";
 import MainCard from "../components/MainCard.styled";
 import Button from "../components/Button.styled";
 import { Form, Input, InputWrapper } from "../components/FormComponents.styled";
@@ -8,6 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "../../api/axios";
 import useAuthContext from "../AuthContext";
+import ViewTitle from "../components/ViewTitle.styled";
 
 const loginSchema = z.object({
   email: z.string(),
@@ -90,10 +90,3 @@ const LoginView = () => {
 };
 
 export default LoginView;
-
-const ViewTitle = styled.h1`
-  color: #555;
-  text-align: center;
-  font-size: 1.75rem;
-  font-weight: 500;
-`;
