@@ -6,7 +6,7 @@ interface IButtonProps {
     type: 'filled' | 'oultined'
 }
 
-export default styled.button<IButtonProps>`
+const Button = styled.button<IButtonProps>`
     display: flex;
     width: 9.375rem;
     padding: 0.375rem 0.5rem;
@@ -28,5 +28,6 @@ export default styled.button<IButtonProps>`
     &:hover {
         transform: scale(1.02);
     }
-
 `
+
+export default Button

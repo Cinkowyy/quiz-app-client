@@ -13,7 +13,7 @@ const QuizzesList = () => {
     const getQuizzes = async () => {
       try {
         const res = await axios.get<IQuiz[]>("/quizzes/getQuizzes");
-        console.log(res.data);
+        // console.log(res.data);
         setQuizzes(res.data);
       } catch (error) {
         console.log(error);
