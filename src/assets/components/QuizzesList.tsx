@@ -19,9 +19,12 @@ const QuizzesList = () => {
         const res = await axios.get<IQuiz[]>("/quizzes/getQuizzes");
         // console.log(res.data);
         if (userData) {
-          setUserQuizzes(
-            res.data.filter((quiz) => quiz.author._id === userData._id)
+          const filteredQuizzes = res.data.filter(
+            (quiz) => quiz.author._id === userData._id
           );
+          if (filteredQuizzes.length > 0) {
+            setUserQuizzes(filteredQuizzes);
+          }
           setQuizzes(
             res.data.filter((quiz) => quiz.author._id !== userData._id)
           );
