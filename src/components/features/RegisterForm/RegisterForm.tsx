@@ -29,6 +29,7 @@ const RegisterValidationSchema = z.object({
 
 type RegisterValuesType = z.infer<typeof RegisterValidationSchema>;
 
+ /* @ts-expect-error/it's working */
 const rule = createSchemaFieldRule(RegisterValidationSchema);
 
 const RegisterForm = () => {

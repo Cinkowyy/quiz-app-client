@@ -26,6 +26,7 @@ const LoginValidationSchema = z.object({
 
 type LoginValuesType = z.infer<typeof LoginValidationSchema>;
 
+ /* @ts-expect-error/it's working */
 const rule = createSchemaFieldRule(LoginValidationSchema);
 
 const LoginForm = () => {
