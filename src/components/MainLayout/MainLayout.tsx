@@ -7,7 +7,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const MainLayout = () => {
   return (
     <Layout className={styles["main-layout"]}>
-      <Sider className={styles["sider"]} width={300}>Sider Menu</Sider>
+      <Sider className={styles["sider"]} width={350}>Sider Menu</Sider>
       <Layout>
         <Header className={styles["header"]}>Header</Header>
         <Content className={styles["content"]}>
