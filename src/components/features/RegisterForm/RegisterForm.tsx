@@ -2,6 +2,8 @@ import { Form, Input, Button, Typography } from "antd";
 import { z } from "zod";
 import { createSchemaFieldRule } from "antd-zod";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import axios from "../../../api/axios";
 
 const { Item } = Form;
 const { Password: PasswordInput } = Input;
@@ -29,14 +31,18 @@ const RegisterValidationSchema = z.object({
 
 type RegisterValuesType = z.infer<typeof RegisterValidationSchema>;
 
- /* @ts-expect-error/it's working */
 const rule = createSchemaFieldRule(RegisterValidationSchema);
 
 const RegisterForm = () => {
   const [form] = Form.useForm();
 
-  const onFinish = (values: RegisterValuesType) => {
-    console.log(values);
+  const { isPending, mutate: register } = useMutation({
+    mutationFn: async (data: RegisterValuesType) =>
+      await axios.post("/identity/register", data),
+  });
+
+  const onFinish = async (values: RegisterValuesType) => {
+    register(values);
   };
 
   return (
@@ -50,7 +56,7 @@ const RegisterForm = () => {
       <Item label="Hasło" name="password" rules={[rule]}>
         <PasswordInput size="large" placeholder="Wpisz bezpieczne hasło" />
       </Item>
-      <Button size="large" type="primary" htmlType="submit">
+      <Button loading={isPending} size="large" type="primary" htmlType="submit">
         Utwórz konto
       </Button>
 
