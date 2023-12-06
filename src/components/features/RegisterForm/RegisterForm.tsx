@@ -4,6 +4,7 @@ import { createSchemaFieldRule } from "antd-zod";
 import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import axios from "../../../api/axios";
+import { AxiosError } from "axios";
 
 const { Item } = Form;
 const { Password: PasswordInput } = Input;
@@ -33,12 +34,32 @@ type RegisterValuesType = z.infer<typeof RegisterValidationSchema>;
 
 const rule = createSchemaFieldRule(RegisterValidationSchema);
 
+type RegisterErrorType = {
+  message: 'string';
+  error: 'UserExists'
+}
+
 const RegisterForm = () => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<RegisterValuesType>();
 
   const { isPending, mutate: register } = useMutation({
     mutationFn: async (data: RegisterValuesType) =>
       await axios.post("/identity/register", data),
+    onError: (error: AxiosError<RegisterErrorType>) => {
+      const errorData = error.response?.data
+
+      if(errorData?.error == 'UserExists') {
+        form.setFields([
+          {
+            name: 'email',
+            errors: ['Użytkownik o takim emailu już istnieje']
+          }
+        ])
+      }
+    },
+    onSuccess: () => {
+      form.resetFields()
+    }
   });
 
   const onFinish = async (values: RegisterValuesType) => {
