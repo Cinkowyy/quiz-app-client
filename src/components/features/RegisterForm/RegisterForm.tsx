@@ -1,7 +1,7 @@
-import { Form, Input, Button, Typography } from "antd";
+import { Form, Input, Button, Typography, App } from "antd";
 import { z } from "zod";
 import { createSchemaFieldRule } from "antd-zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import axios from "../../../api/axios";
 import { AxiosError } from "axios";
@@ -35,31 +35,38 @@ type RegisterValuesType = z.infer<typeof RegisterValidationSchema>;
 const rule = createSchemaFieldRule(RegisterValidationSchema);
 
 type RegisterErrorType = {
-  message: 'string';
-  error: 'UserExists'
-}
+  message: "string";
+  error: "UserExists";
+};
 
 const RegisterForm = () => {
   const [form] = Form.useForm<RegisterValuesType>();
+  const navigate = useNavigate();
+  const { message } = App.useApp();
 
   const { isPending, mutate: register } = useMutation({
+    mutationKey: ["register"],
     mutationFn: async (data: RegisterValuesType) =>
       await axios.post("/identity/register", data),
     onError: (error: AxiosError<RegisterErrorType>) => {
-      const errorData = error.response?.data
+      const errorData = error.response?.data;
 
-      if(errorData?.error == 'UserExists') {
+      if (errorData?.error == "UserExists") {
         form.setFields([
           {
-            name: 'email',
-            errors: ['Użytkownik o takim emailu już istnieje']
-          }
-        ])
+            name: "email",
+            errors: ["Użytkownik o takim emailu już istnieje"],
+          },
+        ]);
       }
     },
     onSuccess: () => {
-      form.resetFields()
-    }
+      message.success({
+        content: "Konto zostało utworzone",
+        duration: 5,
+      });
+      navigate("/sign-in");
+    },
   });
 
   const onFinish = async (values: RegisterValuesType) => {
