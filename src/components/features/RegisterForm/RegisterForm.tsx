@@ -35,7 +35,7 @@ type RegisterValuesType = z.infer<typeof RegisterValidationSchema>;
 const rule = createSchemaFieldRule(RegisterValidationSchema);
 
 type RegisterErrorType = {
-  message: "string";
+  message: string;
   error: "UserExists";
 };
 

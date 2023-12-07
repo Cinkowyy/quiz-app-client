@@ -1,12 +1,35 @@
-import { ReactNode, createContext } from "react";
+import { ReactNode, createContext, useState } from "react";
 
 type AuthContextType = {
   accessToken: string;
   refreshToken: string;
 };
 
-export const AuthContext = createContext<AuthContextType | null>(null);
+const useAuthContextValues = () => {
+  const [authData, setAuthData] = useState<AuthContextType | null>(null);
+
+  const handleSetAuthData = (data: AuthContextType) => {
+    setAuthData(data);
+  };
+
+  const removeAuthData = () => {
+    setAuthData(null);
+  };
+
+  return {
+    authData,
+    setAuthData: handleSetAuthData,
+    removeAuthData,
+  };
+};
+
+export const AuthContext = createContext<ReturnType<
+  typeof useAuthContextValues
+> | null>(null);
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  return <AuthContext.Provider value={null}>{children}</AuthContext.Provider>;
+  const contextValue = useAuthContextValues();
+  return (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+  );
 };
