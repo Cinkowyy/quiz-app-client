@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import axios from "../../../api/axios";
-import useAuthContext from "../../../hooks/useAuthContext";
+import useSessionContext from "../../../hooks/useSessionContext";
 
 const { Item } = Form;
 const { Password: PasswordInput } = Input;
@@ -41,7 +41,7 @@ type LoginResponseType = {
 const LoginForm = () => {
   const [form] = Form.useForm();
 
-  const { setAuthData } = useAuthContext();
+  const { setAuthData } = useSessionContext();
 
   const { isPending, mutate: login } = useMutation({
     mutationKey: ["login"],

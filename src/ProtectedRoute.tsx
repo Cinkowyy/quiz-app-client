@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import useAuthContext from "./hooks/useAuthContext";
+import useSessionContext from "./hooks/useSessionContext";
 
 const ProtectedRoute = ({
   guestRoute,
@@ -8,7 +8,7 @@ const ProtectedRoute = ({
   guestRoute: ReactNode;
   userRoute: ReactNode;
 }) => {
-  const { authData } = useAuthContext();
+  const { authData } = useSessionContext();
 
   if (!authData) return guestRoute;
 

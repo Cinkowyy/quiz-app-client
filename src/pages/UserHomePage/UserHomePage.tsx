@@ -1,16 +1,25 @@
 import { Button, Card } from "antd";
-import useAuthContext from "../../hooks/useAuthContext";
+import useSessionContext from "../../hooks/useSessionContext";
+import axios from "../../api/axios";
+import { useMutation } from "@tanstack/react-query";
 
 const UserHomePage = () => {
-  const { removeAuthData } = useAuthContext();
+  const { authData, removeAuthData } = useSessionContext();
 
-  const logout = () => {
-    removeAuthData();
-  };
+  const { isPending, mutate: logout } = useMutation({
+    mutationFn: async () =>
+      await axios.post("/identity/logout", {
+        refreshToken: authData?.refreshToken,
+      }),
+    onSettled: () => {
+      removeAuthData();
+    },
+  });
+
   return (
     <Card>
       <h2>Witaj w QuizzesApp</h2>
-      <Button onClick={logout} type="primary">
+      <Button loading={isPending} onClick={() => logout()} type="primary">
         Wyloguj się
       </Button>
     </Card>

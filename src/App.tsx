@@ -4,7 +4,7 @@ import { ConfigProvider, App as AntAppProvider } from "antd";
 import RegisterPage from "./pages/Register/RegisterPage";
 import LoginPage from "./pages/Login/LoginPage";
 import GuestHomePage from "./pages/GuestHomePage/GuestHomePage";
-import { AuthContextProvider } from "./AuthContext";
+import { SessionContextProvider } from "./SessionContext";
 import ProtectedRoute from "./ProtectedRoute";
 import UserHomePage from "./pages/UserHomePage/UserHomePage";
 
@@ -23,7 +23,7 @@ function App() {
   return (
     <ConfigProvider theme={themeConfig}>
       <AntAppProvider>
-        <AuthContextProvider>
+        <SessionContextProvider>
           <Routes>
             <Route element={<MainLayout />}>
               <Route
@@ -55,7 +55,7 @@ function App() {
               />
             </Route>
           </Routes>
-        </AuthContextProvider>
+        </SessionContextProvider>
       </AntAppProvider>
     </ConfigProvider>
   );
