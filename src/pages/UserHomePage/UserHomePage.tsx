@@ -1,20 +1,10 @@
 import { Button, Card } from "antd";
 import useSessionContext from "../../hooks/useSessionContext";
-import axios from "../../api/axios";
-import { useMutation } from "@tanstack/react-query";
 
 const UserHomePage = () => {
-  const { authData, removeAuthData } = useSessionContext();
+  const { logoutMutation } = useSessionContext();
 
-  const { isPending, mutate: logout } = useMutation({
-    mutationFn: async () =>
-      await axios.post("/identity/logout", {
-        refreshToken: authData?.refreshToken,
-      }),
-    onSettled: () => {
-      removeAuthData();
-    },
-  });
+  const { isPending, mutate: logout } = logoutMutation;
 
   return (
     <Card>
