@@ -1,4 +1,4 @@
-import { Flex } from "antd";
+import { Button, Divider, Flex, List, Space } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import axios from "../../../api/axios";
 import useSessionContext from "../../../hooks/useSessionContext";
@@ -7,6 +7,7 @@ type QuizType = {
   id: string;
   title: string;
   duration: number;
+  category: string;
   author: {
     id: string;
     nickname: string;
@@ -30,11 +31,28 @@ const QuizzesList = () => {
 
   if (quizzesList)
     return (
-      <Flex vertical gap={8}>
-        {quizzesList.map((quiz) => {
-          return <span key={quiz.id}>{quiz.title}</span>;
-        })}
-      </Flex>
+      <List
+        size="large"
+        dataSource={quizzesList}
+        renderItem={(quiz) => (
+          <List.Item style={{ paddingInline: 0 }}>
+            <Flex
+              align="center"
+              justify="space-between"
+              style={{ width: "100%" }}
+            >
+              <Space>
+                <span>{quiz.title}</span>
+                <Divider type="vertical" />
+                <span>Czas trwania: {quiz.duration} min</span>
+                <Divider type="vertical" />
+                <span>Kategoria: {quiz.category}</span>
+              </Space>
+              <Button type="primary">Rozwiąż</Button>
+            </Flex>
+          </List.Item>
+        )}
+      ></List>
     );
 };
 export default QuizzesList;

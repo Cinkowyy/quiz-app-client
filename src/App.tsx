@@ -15,7 +15,7 @@ const themeConfig = {
       headerBg: "#FFF",
       siderBg: "#FFF",
       footerBg: "#FFF",
-      headerPadding: "0 3rem",
+      headerPadding: "0 2rem",
     },
   },
 };
