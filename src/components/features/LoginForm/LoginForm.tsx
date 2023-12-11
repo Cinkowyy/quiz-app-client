@@ -15,9 +15,6 @@ const LoginValidationSchema = z.object({
   email: z
     .string({
       required_error: "Email jest wymagany",
-    })
-    .email({
-      message: "Email musi być poprawny",
     }),
   password: z.string({
     required_error: "Hasło jest wymagane",

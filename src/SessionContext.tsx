@@ -7,6 +7,12 @@ type AuthStateType = {
   refreshToken: string;
 };
 
+type UserType = {
+  id: string;
+  nickname: string;
+  email: string;
+}
+
 const useSessionContextValues = () => {
   const [authData, setAuthData] = useState<AuthStateType | null>(null);
   const queryClient = useQueryClient();
@@ -34,7 +40,7 @@ const useSessionContextValues = () => {
   const getUserQuery = useQuery({
     queryKey: ["user"],
     queryFn: async () =>
-      await axios.get("/identity/getUser", {
+      await axios.get<UserType>("/identity/getUser", {
         headers: {
           Authorization: `Bearer ${authData?.accessToken}`,
         },
