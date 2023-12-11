@@ -11,7 +11,7 @@ type UserType = {
   id: string;
   nickname: string;
   email: string;
-}
+};
 
 const useSessionContextValues = () => {
   const [authData, setAuthData] = useState<AuthStateType | null>(null);
@@ -39,12 +39,14 @@ const useSessionContextValues = () => {
 
   const getUserQuery = useQuery({
     queryKey: ["user"],
-    queryFn: async () =>
-      await axios.get<UserType>("/identity/getUser", {
+    queryFn: async () => {
+      const response = await axios.get<UserType>("/identity/getUser", {
         headers: {
           Authorization: `Bearer ${authData?.accessToken}`,
         },
-      }),
+      });
+      return response.data;
+    },
     enabled: authData !== null,
     staleTime: Infinity,
   });
@@ -74,7 +76,7 @@ const useSessionContextValues = () => {
   useEffect(() => {
     const localRefreshToken = localStorage.getItem("authData");
     if (!authData && localRefreshToken) refreshSession(localRefreshToken);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
@@ -82,8 +84,8 @@ const useSessionContextValues = () => {
     setAuthData: handleSetAuthData,
     removeAuthData,
     refreshSession,
-    getUserQuery,
-    logoutMutation
+    user: getUserQuery.data,
+    logoutMutation,
   };
 };
 

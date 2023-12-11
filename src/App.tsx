@@ -7,6 +7,7 @@ import GuestHomePage from "./pages/GuestHomePage/GuestHomePage";
 import { SessionContextProvider } from "./SessionContext";
 import ProtectedRoute from "./ProtectedRoute";
 import UserHomePage from "./pages/UserHomePage/UserHomePage";
+import QuizzesListPage from "./pages/QuizzesList/QuizzesListPage";
 
 const themeConfig = {
   components: {
@@ -53,6 +54,7 @@ function App() {
                   />
                 }
               />
+              <Route path="/quizzes-list" element={<QuizzesListPage />} />
             </Route>
           </Routes>
         </SessionContextProvider>
