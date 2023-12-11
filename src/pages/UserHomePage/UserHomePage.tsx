@@ -7,7 +7,7 @@ const UserHomePage = () => {
   const { isPending, mutate: logout } = logoutMutation;
 
   return (
-    <Card>
+    <Card bordered={false}>
       <h2>Witaj w QuizzesApp</h2>
       <Button loading={isPending} onClick={() => logout()} type="primary">
         Wyloguj się

@@ -4,7 +4,7 @@ import QuizzesList from "../../components/features/QuizzesList/QuizzesList";
 const QuizzesListPage = () => {
 
   return (
-    <Card title="Lista quizów">
+    <Card title="Lista quizów" bordered={false}>
       <QuizzesList />
     </Card>
   );

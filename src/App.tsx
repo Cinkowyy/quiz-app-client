@@ -8,6 +8,7 @@ import { SessionContextProvider } from "./SessionContext";
 import ProtectedRoute from "./ProtectedRoute";
 import UserHomePage from "./pages/UserHomePage/UserHomePage";
 import QuizzesListPage from "./pages/QuizzesList/QuizzesListPage";
+import CreateQuiz from "./pages/CreateQuiz/CreateQuiz";
 
 const themeConfig = {
   components: {
@@ -55,6 +56,15 @@ function App() {
                 }
               />
               <Route path="/quizzes-list" element={<QuizzesListPage />} />
+              <Route
+                path="/create-quiz"
+                element={
+                  <ProtectedRoute
+                    userRoute={<CreateQuiz />}
+                    guestRoute={<Navigate to="/sign-in" />}
+                  />
+                }
+              />
             </Route>
           </Routes>
         </SessionContextProvider>

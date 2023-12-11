@@ -13,6 +13,7 @@ const MainLayout = () => {
           <Link to="/sign-up">Rejestracja</Link>
           <Link to="/sign-in">Logowanie</Link>
           <Link to="/quizzes-list">Lista quizów</Link>
+          <Link to="/create-quiz">Stwórz quiz</Link>
         </Flex>
       </Sider>
       <Layout>

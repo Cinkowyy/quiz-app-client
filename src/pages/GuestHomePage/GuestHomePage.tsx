@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const GuestHomePage = () => {
   return (
-    <Card>
+    <Card bordered={false}>
       <h2>Witaj w QuizzesApp</h2>
       <p>Posiadasz już konto?</p>
       <Link to="sign-in">
