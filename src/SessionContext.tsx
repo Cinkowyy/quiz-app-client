@@ -73,8 +73,9 @@ const useSessionContextValues = () => {
     refreshMutation.mutate(token);
   };
 
+  const localRefreshToken = localStorage.getItem("authData");
+
   useEffect(() => {
-    const localRefreshToken = localStorage.getItem("authData");
     if (!authData && localRefreshToken) refreshSession(localRefreshToken);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -86,6 +87,7 @@ const useSessionContextValues = () => {
     refreshSession,
     user: getUserQuery.data,
     logoutMutation,
+    isLocalRefreshToken: localRefreshToken?true:false
   };
 };
 

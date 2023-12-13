@@ -8,10 +8,12 @@ const ProtectedRoute = ({
   guestRoute: ReactNode;
   userRoute: ReactNode;
 }) => {
-  const { authData } = useSessionContext();
+  const { authData, isLocalRefreshToken } = useSessionContext();
 
-  if (!authData) return guestRoute;
+  if (authData) return userRoute;
 
-  return userRoute;
+  if (isLocalRefreshToken) return <>Loading...</>;
+
+  return guestRoute;
 };
 export default ProtectedRoute;
