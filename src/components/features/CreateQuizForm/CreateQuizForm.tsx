@@ -3,7 +3,7 @@ import { Form, Input, InputNumber, Select, Button, Flex, App } from "antd";
 import axios from "../../../api/axios";
 import { z } from "zod";
 import { createSchemaFieldRule } from "antd-zod";
-import { useState } from "react";
+import { QuestionDataType } from "../../../pages/CreateQuiz/CreateQuiz";
 
 const { Item } = Form;
 
@@ -12,14 +12,16 @@ type CategoryType = {
   name: string;
 };
 const QuizDataValidationSchema = z.object({
-  title: z.string({
-    required_error: "Tytuł jest wymagany",
-  }).min(1, {
-    message: "Tytuł jest wymagany"
-  }),
+  title: z
+    .string({
+      required_error: "Tytuł jest wymagany",
+    })
+    .min(1, {
+      message: "Tytuł jest wymagany",
+    }),
   duration: z.number({
     invalid_type_error: "Czas trwania jest wymagany",
-    required_error: "Czas trwania jest wymagany"
+    required_error: "Czas trwania jest wymagany",
   }),
   category: z.string(),
 });
@@ -28,7 +30,7 @@ type QuizDataType = z.infer<typeof QuizDataValidationSchema>;
 
 const rule = createSchemaFieldRule(QuizDataValidationSchema);
 
-const CreateQuizForm = () => {
+const CreateQuizForm = ({ questions }: { questions: QuestionDataType[] }) => {
   const [form] = Form.useForm();
   const { message } = App.useApp();
 
@@ -51,10 +53,7 @@ const CreateQuizForm = () => {
     staleTime: Infinity,
   });
 
-  const [questions, setQuestions] = useState([]);
-
   const onFinish = (values: QuizDataType) => {
-
     if (questions.length < 5) {
       message.error({
         content: "Quiz musi mieć przynajmniej 5 pytań",
@@ -85,8 +84,7 @@ const CreateQuizForm = () => {
       <Item label="Ketegoria" name="category">
         <Select size="large" options={categoriesList} />
       </Item>
-      <Flex align="center" justify="space-between">
-        <Button size="large">Dodaj pytanie</Button>
+      <Flex align="center" justify="flex-end">
         <Button size="large" htmlType="submit" type="primary">
           Dodaj quiz
         </Button>
