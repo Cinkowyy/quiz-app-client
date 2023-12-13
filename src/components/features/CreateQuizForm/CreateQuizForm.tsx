@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { Form, Input, InputNumber, Select, Button } from "antd";
+import { Form, Input, InputNumber, Select, Button, Flex, App } from "antd";
 import axios from "../../../api/axios";
+import { z } from "zod";
+import { createSchemaFieldRule } from "antd-zod";
+import { useState } from "react";
 
 const { Item } = Form;
 
@@ -8,9 +11,26 @@ type CategoryType = {
   id: string;
   name: string;
 };
+const QuizDataValidationSchema = z.object({
+  title: z.string({
+    required_error: "Tytuł jest wymagany",
+  }).min(1, {
+    message: "Tytuł jest wymagany"
+  }),
+  duration: z.number({
+    invalid_type_error: "Czas trwania jest wymagany",
+    required_error: "Czas trwania jest wymagany"
+  }),
+  category: z.string(),
+});
+
+type QuizDataType = z.infer<typeof QuizDataValidationSchema>;
+
+const rule = createSchemaFieldRule(QuizDataValidationSchema);
 
 const CreateQuizForm = () => {
   const [form] = Form.useForm();
+  const { message } = App.useApp();
 
   const { isLoading, data: categoriesList } = useQuery({
     queryKey: ["categoriesList"],
@@ -28,29 +48,49 @@ const CreateQuizForm = () => {
 
       return mappedCategories;
     },
+    staleTime: Infinity,
   });
 
-  const onFinish = (values: any) => {
+  const [questions, setQuestions] = useState([]);
+
+  const onFinish = (values: QuizDataType) => {
+
+    if (questions.length < 5) {
+      message.error({
+        content: "Quiz musi mieć przynajmniej 5 pytań",
+        duration: 5,
+      });
+      return;
+    }
     console.log(values);
   };
 
   if (isLoading && !categoriesList) return <span>Loading...</span>;
 
   return (
-    <Form form={form} onFinish={onFinish}>
-      <Item label="Tytuł" name="title">
+    <Form
+      form={form}
+      onFinish={onFinish}
+      initialValues={{
+        duration: 20,
+        category: categoriesList?.[0].value,
+      }}
+    >
+      <Item label="Tytuł" name="title" rules={[rule]}>
         <Input size="large" placeholder="Podaj tytuł quizu" />
       </Item>
-      <Item label="Czas trwania" name="duration">
-        <InputNumber min={5} defaultValue={20} max={100} size="large" />
+      <Item label="Czas trwania" name="duration" rules={[rule]}>
+        <InputNumber min={5} max={100} size="large" addonAfter="min" />
       </Item>
       <Item label="Ketegoria" name="category">
-        <Select
-          defaultValue={categoriesList?.[0]}
-          size="large"
-          options={categoriesList}
-        />
+        <Select size="large" options={categoriesList} />
       </Item>
+      <Flex align="center" justify="space-between">
+        <Button size="large">Dodaj pytanie</Button>
+        <Button size="large" htmlType="submit" type="primary">
+          Dodaj quiz
+        </Button>
+      </Flex>
     </Form>
   );
 };
