@@ -1,5 +1,5 @@
 import { Card } from "antd";
-import RegisterForm from "../../components/features/RegisterForm/RegisterForm";
+import RegisterForm from "@features/RegisterForm/RegisterForm";
 
 const RegisterPage = () => {
   return (

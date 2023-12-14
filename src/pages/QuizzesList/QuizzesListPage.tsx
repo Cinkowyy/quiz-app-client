@@ -1,5 +1,5 @@
 import { Card } from "antd";
-import QuizzesList from "../../components/features/QuizzesList/QuizzesList";
+import QuizzesList from "@features/QuizzesList/QuizzesList";
 
 const QuizzesListPage = () => {
 

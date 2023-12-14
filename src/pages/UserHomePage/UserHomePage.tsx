@@ -1,5 +1,5 @@
 import { Button, Card } from "antd";
-import useSessionContext from "../../hooks/useSessionContext";
+import useSessionContext from "@/hooks/useSessionContext";
 
 const UserHomePage = () => {
   const { logoutMutation } = useSessionContext();

@@ -1,5 +1,5 @@
 import { Card } from "antd";
-import LoginForm from "../../components/features/LoginForm/LoginForm";
+import LoginForm from "@features/LoginForm/LoginForm";
 
 const LoginPage = () => {
   return (

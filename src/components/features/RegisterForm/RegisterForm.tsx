@@ -2,7 +2,7 @@ import { Form, Input, Button, Typography, App } from "antd";
 import { createSchemaFieldRule } from "antd-zod";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import axios from "../../../api/axios";
+import axios from "@api/axios";
 import { AxiosError } from "axios";
 import {
   RegisterErrorType,

@@ -3,8 +3,8 @@ import { createSchemaFieldRule } from "antd-zod";
 import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import axios from "../../../api/axios";
-import useSessionContext from "../../../hooks/useSessionContext";
+import axios from "@api/axios";
+import useSessionContext from "@/hooks/useSessionContext";
 import {
   LoginErrorType,
   LoginResponseType,
