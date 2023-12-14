@@ -1,39 +1,22 @@
 import { Form, Input, Button, Typography } from "antd";
-import { z } from "zod";
 import { createSchemaFieldRule } from "antd-zod";
 import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import axios from "../../../api/axios";
 import useSessionContext from "../../../hooks/useSessionContext";
+import {
+  LoginErrorType,
+  LoginResponseType,
+  LoginValidationSchema,
+  LoginValuesType,
+} from "./types";
 
 const { Item } = Form;
 const { Password: PasswordInput } = Input;
 const { Text } = Typography;
 
-const LoginValidationSchema = z.object({
-  email: z
-    .string({
-      required_error: "Email jest wymagany",
-    }),
-  password: z.string({
-    required_error: "Hasło jest wymagane",
-  }),
-});
-
-type LoginValuesType = z.infer<typeof LoginValidationSchema>;
-
 const rule = createSchemaFieldRule(LoginValidationSchema);
-
-type LoginErrorType = {
-  message: string;
-  error: "InvalidCredentials";
-};
-
-type LoginResponseType = {
-  accessToken: string;
-  refreshToken: string;
-};
 
 const LoginForm = () => {
   const [form] = Form.useForm();

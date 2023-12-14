@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Form, Input, InputNumber, Select, Button, Flex, App } from "antd";
-import axios from "../../../api/axios";
+import axios from "../../../../../api/axios";
 import { z } from "zod";
 import { createSchemaFieldRule } from "antd-zod";
-import { QuestionDataType } from "../../../pages/CreateQuiz/CreateQuiz";
+import { QuestionDataType } from "../../types";
 
 const { Item } = Form;
 

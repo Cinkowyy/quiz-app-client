@@ -1,9 +1,6 @@
 import { Button, Flex, Modal, Form, Input, Radio } from "antd";
 import { createSchemaFieldRule } from "antd-zod";
-import {
-  QuestionDataType,
-  QuestionValidationSchema,
-} from "../../../pages/CreateQuiz/CreateQuiz";
+import { QuestionDataType, QuestionValidationSchema } from "../../types";
 
 const { Item } = Form;
 

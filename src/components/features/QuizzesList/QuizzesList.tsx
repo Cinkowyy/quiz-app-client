@@ -2,17 +2,7 @@ import { Button, Divider, Flex, List, Space } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import axios from "../../../api/axios";
 import useSessionContext from "../../../hooks/useSessionContext";
-
-type QuizType = {
-  id: string;
-  title: string;
-  duration: number;
-  category: string;
-  author: {
-    id: string;
-    nickname: string;
-  };
-};
+import { QuizType } from "./types";
 
 const QuizzesList = () => {
   const { user } = useSessionContext();

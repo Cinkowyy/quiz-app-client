@@ -1,21 +1,8 @@
-import { Button, Card, Divider, Flex, List, Space } from "antd";
-import CreateQuizForm from "../../components/features/CreateQuizForm/CreateQuizForm";
 import { useState } from "react";
-import AddQuestionModal from "../../components/features/AddQuestionModal/AddQuestionModal";
-import { z } from "zod";
-
-export const QuestionValidationSchema = z.object({
-  content: z
-    .string({
-      required_error: "Treść jest wymagana",
-    })
-    .min(1, {
-      message: "Treść jest wymagana",
-    }),
-  type: z.enum(["single", "mutli"]),
-});
-
-export type QuestionDataType = z.infer<typeof QuestionValidationSchema>;
+import { QuestionDataType } from "./types";
+import { Button, Card, Divider, Flex, List, Space } from "antd";
+import CreateQuizForm from "./components/CreateQuizForm/CreateQuizForm";
+import AddQuestionModal from "./components/AddQuestionModal/AddQuestionModal";
 
 const CreateQuiz = () => {
   const [questions, setQuestions] = useState<QuestionDataType[]>([]);
@@ -29,6 +16,15 @@ const CreateQuiz = () => {
     setIsOpen(isOpen);
   };
 
+  const QuestionsListTitle = (
+    <Flex align="center" justify="space-between">
+      Pytania
+      <Button type="primary" onClick={() => setIsOpen(true)}>
+        Dodaj
+      </Button>
+    </Flex>
+  );
+
   return (
     <Flex gap={32}>
       <Card title="Stwórz quiz" style={{ width: 400 }} bordered={false}>
@@ -36,14 +32,7 @@ const CreateQuiz = () => {
       </Card>
 
       <Card
-        title={
-          <Flex align="center" justify="space-between">
-            Pytania
-            <Button type="primary" onClick={() => setIsOpen(true)}>
-              Dodaj
-            </Button>
-          </Flex>
-        }
+        title={QuestionsListTitle}
         style={{ minWidth: 400 }}
         bordered={false}
       >
