@@ -6,24 +6,24 @@ const { Item } = Form;
 
 const rule = createSchemaFieldRule(QuestionValidationSchema);
 
-type AddQuestionModalProps = {
+type QuestionModalProps = {
   isOpen: boolean;
   closeModal: () => void;
   addQuestion: (value: QuestionDataType) => void;
 };
 
-const AddQuestionModal = ({
+const QuestionFormModal = ({
   isOpen,
   closeModal,
   addQuestion,
-}: AddQuestionModalProps) => {
+}: QuestionModalProps) => {
   const [form] = Form.useForm();
 
   const onFinish = (values: QuestionDataType) => {
     console.log(values);
     addQuestion(values);
     form.resetFields();
-    closeModal;
+    closeModal();
   };
   return (
     <Modal
@@ -64,4 +64,5 @@ const AddQuestionModal = ({
     </Modal>
   );
 };
-export default AddQuestionModal;
+
+export default QuestionFormModal;

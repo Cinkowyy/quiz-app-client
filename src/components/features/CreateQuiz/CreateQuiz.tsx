@@ -2,8 +2,8 @@ import { useState } from "react";
 import { QuestionDataType } from "./types";
 import { Button, Card, Divider, Flex, Typography } from "antd";
 import CreateQuizForm from "./components/CreateQuizForm/CreateQuizForm";
-import AddQuestionModal from "./components/AddQuestionModal/AddQuestionModal";
 import QuestionsList from "./components/QuestionsList/QuestionsList";
+import QuestionFormModal from "./components/QuestionFormModal/QuestionFormModal";
 
 const { Text } = Typography;
 
@@ -65,7 +65,7 @@ const CreateQuiz = () => {
           Dodaj quiz
         </Button>
       </Card>
-      <AddQuestionModal
+      <QuestionFormModal
         isOpen={isOpen}
         closeModal={closeModal}
         addQuestion={addQuestion}
