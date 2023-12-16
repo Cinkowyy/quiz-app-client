@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { QuestionDataType } from "./types";
-import { Button, Card, Divider, Flex, List, Space, Typography } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Button, Card, Divider, Flex, Typography } from "antd";
 import CreateQuizForm from "./components/CreateQuizForm/CreateQuizForm";
 import AddQuestionModal from "./components/AddQuestionModal/AddQuestionModal";
+import QuestionsList from "./components/QuestionsList/QuestionsList";
 
 const { Text } = Typography;
 
@@ -41,6 +41,7 @@ const CreateQuiz = () => {
       >
         <Flex gap="1rem">
           <CreateQuizForm questions={questions} />
+
           <Divider
             type="vertical"
             style={{
@@ -48,46 +49,10 @@ const CreateQuiz = () => {
             }}
           />
 
-          <List
-            size="large"
-            style={{
-              minWidth: 350,
-            }}
-            locale={{ emptyText: "Brak pytań" }}
-            dataSource={questions}
-            renderItem={(question) => (
-              <List.Item style={{ paddingInline: 0 }}>
-                <Flex
-                  align="center"
-                  justify="space-between"
-                  gap="1rem"
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  <Space>
-                    <span>Treść: {question.content}</span>
-                    <Divider type="vertical" />
-                    <span>Typ: {question.type}</span>
-                  </Space>
-                  <Space>
-                    <Button
-                      type="primary"
-                      size="small"
-                      icon={<EditOutlined />}
-                    />
-                    <Button
-                      type="primary"
-                      danger
-                      size="small"
-                      onClick={() => removeQuestion(question)}
-                      icon={<DeleteOutlined />}
-                    />
-                  </Space>
-                </Flex>
-              </List.Item>
-            )}
-          ></List>
+          <QuestionsList
+            questions={questions}
+            removeQuestion={removeQuestion}
+          />
         </Flex>
         <Button
           type="primary"
