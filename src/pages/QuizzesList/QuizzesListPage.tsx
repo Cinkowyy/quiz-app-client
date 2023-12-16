@@ -1,12 +1,21 @@
-import { Card } from "antd";
+import { Typography } from "antd";
 import QuizzesList from "@features/QuizzesList/QuizzesList";
 
-const QuizzesListPage = () => {
+const { Title } = Typography;
 
+const QuizzesListPage = () => {
   return (
-    <Card title="Lista quizów" bordered={false}>
+    <>
+      <Title
+        level={2}
+        style={{
+          marginTop: 0,
+        }}
+      >
+        Lista quizów
+      </Title>
       <QuizzesList />
-    </Card>
+    </>
   );
 };
 export default QuizzesListPage;

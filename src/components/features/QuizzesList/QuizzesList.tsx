@@ -1,13 +1,18 @@
-import { Button, Divider, Flex, List, Space } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import axios from "../../../api/axios";
 import useSessionContext from "../../../hooks/useSessionContext";
 import { QuizType } from "./types";
+import styles from "./QuizzesList.module.scss";
+import QuizCard from "./components/QuizCard";
 
 const QuizzesList = () => {
   const { user } = useSessionContext();
 
-  const { isLoading, data: quizzesList } = useQuery({
+  const {
+    isLoading,
+    isError,
+    data: quizzesList,
+  } = useQuery({
     queryKey: ["quizzesList"],
     queryFn: async () => {
       const response = await axios.get<QuizType[]>("/quizzes/getQuizzes");
@@ -17,32 +22,17 @@ const QuizzesList = () => {
       return response.data.filter((quiz) => quiz.author.id != user.id);
     },
   });
-  if (isLoading && !quizzesList) return <div>Loading...</div>;
+  if (!quizzesList && isLoading) return <div>Loading...</div>;
+
+  if (!quizzesList && isError) return <div>Wystąpił błąd</div>;
 
   if (quizzesList)
     return (
-      <List
-        size="large"
-        dataSource={quizzesList}
-        renderItem={(quiz) => (
-          <List.Item style={{ paddingInline: 0 }}>
-            <Flex
-              align="center"
-              justify="space-between"
-              style={{ width: "100%" }}
-            >
-              <Space>
-                <span>{quiz.title}</span>
-                <Divider type="vertical" />
-                <span>Czas trwania: {quiz.duration} min</span>
-                <Divider type="vertical" />
-                <span>Kategoria: {quiz.category}</span>
-              </Space>
-              <Button type="primary">Rozwiąż</Button>
-            </Flex>
-          </List.Item>
-        )}
-      ></List>
+      <div className={styles["quizzes-grid"]}>
+        {quizzesList.map((quiz) => {
+          return <QuizCard quiz={quiz} key={quiz.id} />;
+        })}
+      </div>
     );
 };
 export default QuizzesList;

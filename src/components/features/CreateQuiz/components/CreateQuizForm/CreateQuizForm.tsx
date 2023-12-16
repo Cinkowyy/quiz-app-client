@@ -70,6 +70,7 @@ const CreateQuizForm = ({ questions }: { questions: QuestionDataType[] }) => {
     <Form
       form={form}
       onFinish={onFinish}
+      id="createQuizForm"
       initialValues={{
         duration: 20,
         category: categoriesList?.[0].value,
@@ -84,11 +85,6 @@ const CreateQuizForm = ({ questions }: { questions: QuestionDataType[] }) => {
       <Item label="Ketegoria" name="category">
         <Select size="large" options={categoriesList} />
       </Item>
-      <Flex align="center" justify="flex-end">
-        <Button size="large" htmlType="submit" type="primary">
-          Dodaj quiz
-        </Button>
-      </Flex>
     </Form>
   );
 };
