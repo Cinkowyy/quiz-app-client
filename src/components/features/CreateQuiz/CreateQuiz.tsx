@@ -19,9 +19,7 @@ const CreateQuiz = () => {
     setQuestions((prev) => prev.filter((q) => q != question));
   };
 
-  const handleSetIsOpen = (isOpen: boolean) => {
-    setIsOpen(isOpen);
-  };
+  const closeModal = () => setIsOpen(false)
 
   const CardTitle = (
     <Flex align="center" justify="space-between">
@@ -40,7 +38,7 @@ const CreateQuiz = () => {
         bordered={false}
       >
         <Flex gap="1rem">
-          <CreateQuizForm questions={questions} />
+          <CreateQuizForm questionsCount={questions.length} />
 
           <Divider
             type="vertical"
@@ -69,7 +67,7 @@ const CreateQuiz = () => {
       </Card>
       <AddQuestionModal
         isOpen={isOpen}
-        setIsOpen={handleSetIsOpen}
+        closeModal={closeModal}
         addQuestion={addQuestion}
       />
     </>

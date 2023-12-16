@@ -8,13 +8,13 @@ const rule = createSchemaFieldRule(QuestionValidationSchema);
 
 type AddQuestionModalProps = {
   isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
+  closeModal: () => void;
   addQuestion: (value: QuestionDataType) => void;
 };
 
 const AddQuestionModal = ({
   isOpen,
-  setIsOpen,
+  closeModal,
   addQuestion,
 }: AddQuestionModalProps) => {
   const [form] = Form.useForm();
@@ -23,16 +23,16 @@ const AddQuestionModal = ({
     console.log(values);
     addQuestion(values);
     form.resetFields();
-    setIsOpen(false);
+    closeModal;
   };
   return (
     <Modal
       open={isOpen}
-      onCancel={() => setIsOpen(false)}
+      onCancel={closeModal}
       title="Dodaj pytanie"
       footer={
         <Flex justify="space-between">
-          <Button onClick={() => setIsOpen(false)}>Anuluj</Button>
+          <Button onClick={closeModal}>Anuluj</Button>
           <Button type="primary" htmlType="submit" form="questionForm">
             Dodaj
           </Button>

@@ -1,36 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { Form, Input, InputNumber, Select, Button, Flex, App } from "antd";
+import { Form, Input, InputNumber, Select, App } from "antd";
 import axios from "@api/axios";
-import { z } from "zod";
 import { createSchemaFieldRule } from "antd-zod";
-import { QuestionDataType } from "../../types";
+import { CategoryType, QuizDataType, QuizDataValidationSchema } from "./types";
 
 const { Item } = Form;
 
-type CategoryType = {
-  id: string;
-  name: string;
-};
-const QuizDataValidationSchema = z.object({
-  title: z
-    .string({
-      required_error: "Tytuł jest wymagany",
-    })
-    .min(1, {
-      message: "Tytuł jest wymagany",
-    }),
-  duration: z.number({
-    invalid_type_error: "Czas trwania jest wymagany",
-    required_error: "Czas trwania jest wymagany",
-  }),
-  category: z.string(),
-});
-
-type QuizDataType = z.infer<typeof QuizDataValidationSchema>;
-
 const rule = createSchemaFieldRule(QuizDataValidationSchema);
 
-const CreateQuizForm = ({ questions }: { questions: QuestionDataType[] }) => {
+const CreateQuizForm = ({ questionsCount }: { questionsCount: number }) => {
   const [form] = Form.useForm();
   const { message } = App.useApp();
 
@@ -54,7 +32,7 @@ const CreateQuizForm = ({ questions }: { questions: QuestionDataType[] }) => {
   });
 
   const onFinish = (values: QuizDataType) => {
-    if (questions.length < 5) {
+    if (questionsCount < 5) {
       message.error({
         content: "Quiz musi mieć przynajmniej 5 pytań",
         duration: 5,
