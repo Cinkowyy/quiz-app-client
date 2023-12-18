@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { Form, Input, InputNumber, Select, App } from "antd";
 import axios from "@api/axios";
+import { useQuery } from "@tanstack/react-query";
+import { Form, Input, InputNumber, Select } from "antd";
 import { createSchemaFieldRule } from "antd-zod";
 import { CategoryType, QuizDataType, QuizDataValidationSchema } from "./types";
 
@@ -8,9 +8,12 @@ const { Item } = Form;
 
 const rule = createSchemaFieldRule(QuizDataValidationSchema);
 
-const CreateQuizForm = ({ questionsCount }: { questionsCount: number }) => {
+const CreateQuizForm = ({
+  onFormSubmit,
+}: {
+  onFormSubmit: (v: QuizDataType) => void;
+}) => {
   const [form] = Form.useForm();
-  const { message } = App.useApp();
 
   const { isLoading, data: categoriesList } = useQuery({
     queryKey: ["categoriesList"],
@@ -31,27 +34,14 @@ const CreateQuizForm = ({ questionsCount }: { questionsCount: number }) => {
     staleTime: Infinity,
   });
 
-  const onFinish = (values: QuizDataType) => {
-    if (questionsCount < 5) {
-      message.error({
-        content: "Quiz musi mieć przynajmniej 5 pytań",
-        duration: 5,
-      });
-      return;
-    }
-    console.log(values);
-  };
-
-  if (isLoading && !categoriesList) return <span>Loading...</span>;
-
   return (
     <Form
       form={form}
-      onFinish={onFinish}
+      onFinish={onFormSubmit}
       id="createQuizForm"
       initialValues={{
         duration: 20,
-        category: categoriesList?.[0].value,
+        category: categoriesList?.[0].value ?? "Wiedza Ogólna",
       }}
     >
       <Item label="Tytuł" name="title" rules={[rule]}>
@@ -61,7 +51,7 @@ const CreateQuizForm = ({ questionsCount }: { questionsCount: number }) => {
         <InputNumber min={5} max={100} size="large" addonAfter="min" />
       </Item>
       <Item label="Ketegoria" name="category">
-        <Select size="large" options={categoriesList} />
+        <Select size="large" options={categoriesList} loading={isLoading} />
       </Item>
     </Form>
   );
