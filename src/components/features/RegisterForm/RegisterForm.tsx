@@ -51,17 +51,17 @@ const RegisterForm = () => {
   };
 
   return (
-    <Form form={form} onFinish={onFinish} layout={"vertical"}>
+    <Form form={form} onFinish={onFinish} layout={"vertical"} size="large">
       <Item label="Nickname" name="nickname" rules={[rule]}>
-        <Input size="large" placeholder="Jak chcesz być nazywany?" />
+        <Input placeholder="Jak chcesz być nazywany?" />
       </Item>
       <Item label="E-mail" name="email" rules={[rule]}>
-        <Input size="large" placeholder="Jaki jest twój e-mail?" />
+        <Input placeholder="Jaki jest twój e-mail?" />
       </Item>
       <Item label="Hasło" name="password" rules={[rule]}>
-        <PasswordInput size="large" placeholder="Wpisz bezpieczne hasło" />
+        <PasswordInput placeholder="Wpisz bezpieczne hasło" />
       </Item>
-      <Button loading={isPending} size="large" type="primary" htmlType="submit">
+      <Button loading={isPending} type="primary" htmlType="submit">
         Utwórz konto
       </Button>
 

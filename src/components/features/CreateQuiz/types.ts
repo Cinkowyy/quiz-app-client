@@ -1,5 +1,26 @@
 import { z } from "zod";
 
+export type CategoryType = {
+    id: string;
+    name: string;
+};
+export const QuizDataValidationSchema = z.object({
+    title: z
+        .string({
+            required_error: "Tytuł jest wymagany",
+        })
+        .min(1, {
+            message: "Tytuł jest wymagany",
+        }),
+    duration: z.number({
+        invalid_type_error: "Czas trwania jest wymagany",
+        required_error: "Czas trwania jest wymagany",
+    }),
+    category: z.string(),
+});
+
+export type QuizFormDataType = z.infer<typeof QuizDataValidationSchema>;
+
 export const QuestionValidationSchema = z.object({
     content: z
         .string({
@@ -11,4 +32,7 @@ export const QuestionValidationSchema = z.object({
     type: z.enum(["single", "mutli"]),
 });
 
-export type QuestionDataType = z.infer<typeof QuestionValidationSchema>;
+export type QuestionFormDataType = z.infer<typeof QuestionValidationSchema>;
+export type QuestionType = QuestionFormDataType & {
+    id: number;
+};

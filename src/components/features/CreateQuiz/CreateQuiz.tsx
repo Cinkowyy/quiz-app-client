@@ -1,30 +1,35 @@
 import { useState } from "react";
-import { QuestionDataType } from "./types";
+import { QuizFormDataType, QuestionFormDataType, QuestionType } from "./types";
 import { App, Button, Card, Divider, Flex, Typography } from "antd";
 import CreateQuizForm from "./components/CreateQuizForm/CreateQuizForm";
 import QuestionsList from "./components/QuestionsList/QuestionsList";
 import QuestionFormModal from "./components/QuestionFormModal/QuestionFormModal";
-import { QuizDataType } from "./components/CreateQuizForm/types";
 
 const { Text } = Typography;
 
 const CreateQuiz = () => {
-  const [questions, setQuestions] = useState<QuestionDataType[]>([]);
+  const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
   const { message } = App.useApp();
 
-  const addQuestion = (question: QuestionDataType) => {
-    setQuestions((prev) => [...prev, question]);
+  const addQuestion = (question: QuestionFormDataType) => {
+    setQuestions((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        ...question,
+      },
+    ]);
   };
 
-  const removeQuestion = (question: QuestionDataType) => {
-    setQuestions((prev) => prev.filter((q) => q != question));
+  const removeQuestion = (questionId: number) => {
+    setQuestions((prev) => prev.filter((q) => q.id != questionId));
   };
 
   const closeModal = () => setIsOpen(false);
 
-  const onFormSubmit = (values: QuizDataType) => {
+  const onFormSubmit = (values: QuizFormDataType) => {
     if (questions.length < 5) {
       message.error({
         content: "Quiz musi mieć przynajmniej 5 pytań",

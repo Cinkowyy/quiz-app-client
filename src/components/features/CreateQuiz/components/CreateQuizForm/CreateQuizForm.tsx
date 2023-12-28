@@ -1,8 +1,12 @@
 import axios from "@api/axios";
 import { useQuery } from "@tanstack/react-query";
-import { Form, Input, InputNumber, Select } from "antd";
+import { Form, Input, InputNumber, Radio, Select } from "antd";
 import { createSchemaFieldRule } from "antd-zod";
-import { CategoryType, QuizDataType, QuizDataValidationSchema } from "./types";
+import {
+  CategoryType,
+  QuizDataValidationSchema,
+  QuizFormDataType,
+} from "../../types";
 
 const { Item } = Form;
 
@@ -11,7 +15,7 @@ const rule = createSchemaFieldRule(QuizDataValidationSchema);
 const CreateQuizForm = ({
   onFormSubmit,
 }: {
-  onFormSubmit: (v: QuizDataType) => void;
+  onFormSubmit: (v: QuizFormDataType) => void;
 }) => {
   const [form] = Form.useForm();
 
@@ -39,19 +43,31 @@ const CreateQuizForm = ({
       form={form}
       onFinish={onFormSubmit}
       id="createQuizForm"
+      size="large"
       initialValues={{
         duration: 20,
-        category: categoriesList?.[0].value ?? "Wiedza Ogólna",
+        category: categoriesList?.[0].value ?? null,
+        visibility: "public",
       }}
     >
       <Item label="Tytuł" name="title" rules={[rule]}>
-        <Input size="large" placeholder="Podaj tytuł quizu" />
+        <Input placeholder="Podaj tytuł quizu" />
       </Item>
       <Item label="Czas trwania" name="duration" rules={[rule]}>
-        <InputNumber min={5} max={100} size="large" addonAfter="min" />
+        <InputNumber min={5} max={100} addonAfter="min" />
+      </Item>
+      <Item label="Widoczność" name="visibility">
+        <Radio.Group
+          options={[
+            { label: "Publiczny", value: "public" },
+            { label: "Prywatny", value: "private" },
+          ]}
+          optionType="button"
+          buttonStyle="solid"
+        />
       </Item>
       <Item label="Ketegoria" name="category">
-        <Select size="large" options={categoriesList} loading={isLoading} />
+        <Select options={categoriesList} loading={isLoading} />
       </Item>
     </Form>
   );

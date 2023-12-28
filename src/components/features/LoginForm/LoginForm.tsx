@@ -54,14 +54,14 @@ const LoginForm = () => {
   };
 
   return (
-    <Form form={form} onFinish={onFinish} layout={"vertical"}>
+    <Form form={form} onFinish={onFinish} layout={"vertical"} size="large">
       <Item label="E-mail" name="email" rules={[rule]}>
-        <Input size="large" placeholder="Podaj swój email" />
+        <Input placeholder="Podaj swój email" />
       </Item>
       <Item label="Hasło" name="password" rules={[rule]}>
-        <PasswordInput size="large" placeholder="Podaj hasło" />
+        <PasswordInput placeholder="Podaj hasło" />
       </Item>
-      <Button loading={isPending} size="large" type="primary" htmlType="submit">
+      <Button loading={isPending} type="primary" htmlType="submit">
         Zaloguj się
       </Button>
 

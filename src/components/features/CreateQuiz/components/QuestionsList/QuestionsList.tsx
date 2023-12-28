@@ -1,10 +1,10 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Divider, Flex, List, Space } from "antd";
-import { QuestionDataType } from "../../types";
+import { QuestionType } from "../../types";
 
 type ListProps = {
-  questions: QuestionDataType[];
-  removeQuestion: (v: QuestionDataType) => void;
+  questions: QuestionType[];
+  removeQuestion: (id: number) => void;
 };
 
 const QuestionsList = ({ questions, removeQuestion }: ListProps) => {
@@ -37,7 +37,7 @@ const QuestionsList = ({ questions, removeQuestion }: ListProps) => {
                 type="primary"
                 danger
                 size="small"
-                onClick={() => removeQuestion(question)}
+                onClick={() => removeQuestion(question.id)}
                 icon={<DeleteOutlined />}
               />
             </Space>
