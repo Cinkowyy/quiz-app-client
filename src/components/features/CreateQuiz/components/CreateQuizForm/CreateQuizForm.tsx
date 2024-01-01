@@ -18,7 +18,7 @@ const CreateQuizForm = ({
 }: {
   onFormSubmit: (v: QuizFormDataType) => void;
 }) => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<QuizFormDataType>();
 
   const { isLoading, data: categoriesList } = useQuery({
     queryKey: ["categoriesList"],
@@ -43,8 +43,7 @@ const CreateQuizForm = ({
 
     if(categoriesList && !form.getFieldValue('category')) form.setFieldValue('category', categoriesList[0].value)
     
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoriesList])
+  }, [categoriesList, form])
 
   return (
     <Form
