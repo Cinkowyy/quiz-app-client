@@ -1,6 +1,11 @@
 import { Button, Flex, Modal, Form, Input, Radio } from "antd";
 import { createSchemaFieldRule } from "antd-zod";
-import { QuestionFormDataType, QuestionValidationSchema } from "../../types";
+import {
+  QuestionFormDataType,
+  QuestionType,
+  QuestionValidationSchema,
+} from "../../types";
+import { useEffect } from "react";
 
 const { Item } = Form;
 
@@ -9,21 +14,33 @@ const rule = createSchemaFieldRule(QuestionValidationSchema);
 type QuestionModalProps = {
   isOpen: boolean;
   closeModal: () => void;
-  addQuestion: (value: QuestionFormDataType) => void;
+  onSubmit: (value: QuestionFormDataType) => void;
+  dataToEdit: QuestionType | null;
 };
 
 const QuestionFormModal = ({
   isOpen,
   closeModal,
-  addQuestion,
+  onSubmit,
+  dataToEdit,
 }: QuestionModalProps) => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<QuestionFormDataType>();
 
   const onFinish = (values: QuestionFormDataType) => {
-    addQuestion(values);
-    form.resetFields();
+    onSubmit(values);
+    form.resetFields()
     closeModal();
   };
+
+  useEffect(() => {
+
+    if(!dataToEdit) form.resetFields()
+    else form.setFieldsValue({
+      content: dataToEdit.content,
+      type: dataToEdit.type
+    })
+  }, [dataToEdit, form])
+
   return (
     <Modal
       open={isOpen}
@@ -40,7 +57,7 @@ const QuestionFormModal = ({
             htmlType="submit"
             form="questionForm"
           >
-            Dodaj
+            {dataToEdit ? "Zapisz" : "Dodaj"}
           </Button>
         </Flex>
       }
@@ -50,9 +67,12 @@ const QuestionFormModal = ({
         form={form}
         size="large"
         onFinish={onFinish}
-        initialValues={{
-          type: "single",
-        }}
+        initialValues={
+          {
+            content: undefined,
+            type: "single",
+          }
+        }
       >
         <Item label="Treść" name="content" rules={[rule]}>
           <Input placeholder="Podaj treść pytania" />

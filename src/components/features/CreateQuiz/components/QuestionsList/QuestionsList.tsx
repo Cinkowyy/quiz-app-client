@@ -5,9 +5,14 @@ import { QuestionType } from "../../types";
 type ListProps = {
   questions: QuestionType[];
   removeQuestion: (id: number) => void;
+  editQuestion: (id: number) => void;
 };
 
-const QuestionsList = ({ questions, removeQuestion }: ListProps) => {
+const QuestionsList = ({
+  questions,
+  removeQuestion,
+  editQuestion,
+}: ListProps) => {
   return (
     <List
       size="large"
@@ -32,7 +37,12 @@ const QuestionsList = ({ questions, removeQuestion }: ListProps) => {
               <span>Typ: {question.type}</span>
             </Space>
             <Space>
-              <Button type="primary" size="small" icon={<EditOutlined />} />
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => editQuestion(question.id)}
+                icon={<EditOutlined />}
+              />
               <Button
                 type="primary"
                 danger

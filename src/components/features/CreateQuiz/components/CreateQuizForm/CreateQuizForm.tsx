@@ -7,6 +7,7 @@ import {
   QuizDataValidationSchema,
   QuizFormDataType,
 } from "../../types";
+import { useEffect } from "react";
 
 const { Item } = Form;
 
@@ -38,6 +39,13 @@ const CreateQuizForm = ({
     staleTime: Infinity,
   });
 
+  useEffect(() => {
+
+    if(categoriesList && !form.getFieldValue('category')) form.setFieldValue('category', categoriesList[0].value)
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoriesList])
+
   return (
     <Form
       form={form}
@@ -46,7 +54,6 @@ const CreateQuizForm = ({
       size="large"
       initialValues={{
         duration: 20,
-        category: categoriesList?.[0].value ?? null,
         visibility: "public",
       }}
     >

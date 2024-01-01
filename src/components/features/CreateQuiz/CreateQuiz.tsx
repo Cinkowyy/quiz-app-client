@@ -10,12 +10,15 @@ const { Text } = Typography;
 const CreateQuiz = () => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [questionToEdit, setQuestionToEdit] = useState<QuestionType | null>(
+    null
+  );
 
   const { message } = App.useApp();
 
   const addQuestion = (question: QuestionFormDataType) => {
-    setQuestions((prev) => [
-      ...prev,
+    setQuestions((prevQuestions) => [
+      ...prevQuestions,
       {
         id: Date.now(),
         ...question,
@@ -23,11 +26,35 @@ const CreateQuiz = () => {
     ]);
   };
 
+  const editQuestion = (updatedQuestionData: QuestionFormDataType) => {
+    if (!questionToEdit) return;
+    const questionId = questionToEdit.id;
+
+    setQuestions((prevQuestions) =>
+      prevQuestions.map((question) =>
+        question.id === questionId
+          ? { id: questionId, ...updatedQuestionData }
+          : question
+      )
+    );
+    setQuestionToEdit(null);
+  };
+
+  const openEditMode = (questionId: number) => {
+    const questionToEdit = questions.filter((q) => q.id === questionId)[0];
+    setQuestionToEdit(questionToEdit);
+    openModal();
+  };
+
   const removeQuestion = (questionId: number) => {
     setQuestions((prev) => prev.filter((q) => q.id != questionId));
   };
 
-  const closeModal = () => setIsOpen(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => {
+    setIsOpen(false);
+    setQuestionToEdit(null);
+  };
 
   const onFormSubmit = (values: QuizFormDataType) => {
     if (questions.length < 5) {
@@ -43,7 +70,7 @@ const CreateQuiz = () => {
   const CardTitle = (
     <Flex align="center" justify="space-between">
       <Text>Ustawienia</Text>
-      <Button type="primary" size="middle" onClick={() => setIsOpen(true)}>
+      <Button type="primary" size="middle" onClick={openModal}>
         Dodaj pytanie
       </Button>
     </Flex>
@@ -69,6 +96,7 @@ const CreateQuiz = () => {
           <QuestionsList
             questions={questions}
             removeQuestion={removeQuestion}
+            editQuestion={openEditMode}
           />
         </Flex>
         <Button
@@ -87,7 +115,8 @@ const CreateQuiz = () => {
       <QuestionFormModal
         isOpen={isOpen}
         closeModal={closeModal}
-        addQuestion={addQuestion}
+        onSubmit={questionToEdit ? editQuestion : addQuestion}
+        dataToEdit={questionToEdit}
       />
     </>
   );
