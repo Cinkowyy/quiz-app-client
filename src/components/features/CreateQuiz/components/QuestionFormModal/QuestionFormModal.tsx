@@ -107,6 +107,7 @@ const QuestionFormModal = ({
                       addonAfter={
                         <MinusCircleOutlined
                           onClick={() => {
+                            if (fields.length < 3) return;
                             remove(name);
                           }}
                         />
