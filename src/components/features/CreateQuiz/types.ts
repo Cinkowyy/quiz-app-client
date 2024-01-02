@@ -21,6 +21,16 @@ export const QuizDataValidationSchema = z.object({
 
 export type QuizFormDataType = z.infer<typeof QuizDataValidationSchema>;
 
+export const AnswerValidationSchema = z.object({
+    content: z.string({
+        required_error: "Treść jest wymagana",
+    })
+        .min(1, {
+            message: "Treść jest wymagana",
+        }),
+    // isCorrect: z.boolean()
+})
+
 export const QuestionValidationSchema = z.object({
     content: z
         .string({
@@ -30,6 +40,7 @@ export const QuestionValidationSchema = z.object({
             message: "Treść jest wymagana",
         }),
     type: z.enum(["single", "mutli"]),
+    answers: z.array(AnswerValidationSchema),
 });
 
 export type QuestionFormDataType = z.infer<typeof QuestionValidationSchema>;

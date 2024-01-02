@@ -17,6 +17,8 @@ const CreateQuiz = () => {
   const { message } = App.useApp();
 
   const addQuestion = (question: QuestionFormDataType) => {
+    console.log(question);
+    
     setQuestions((prevQuestions) => [
       ...prevQuestions,
       {

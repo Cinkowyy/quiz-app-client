@@ -6,6 +6,8 @@ import {
   QuestionValidationSchema,
 } from "../../types";
 import { useEffect } from "react";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import styles from "./QuestionFormModal.module.scss";
 
 const { Item } = Form;
 
@@ -28,18 +30,19 @@ const QuestionFormModal = ({
 
   const onFinish = (values: QuestionFormDataType) => {
     onSubmit(values);
-    form.resetFields()
+    form.resetFields();
     closeModal();
   };
 
   useEffect(() => {
-
-    if(!dataToEdit) form.resetFields()
-    else form.setFieldsValue({
-      content: dataToEdit.content,
-      type: dataToEdit.type
-    })
-  }, [dataToEdit, form])
+    if (!dataToEdit) form.resetFields();
+    else
+      form.setFieldsValue({
+        content: dataToEdit.content,
+        type: dataToEdit.type,
+        answers: [...dataToEdit.answers],
+      });
+  }, [dataToEdit, form]);
 
   return (
     <Modal
@@ -67,12 +70,11 @@ const QuestionFormModal = ({
         form={form}
         size="large"
         onFinish={onFinish}
-        initialValues={
-          {
-            content: undefined,
-            type: "single",
-          }
-        }
+        initialValues={{
+          content: undefined,
+          type: "single",
+          answers: [{}, {}],
+        }}
       >
         <Item label="Treść" name="content" rules={[rule]}>
           <Input placeholder="Podaj treść pytania" />
@@ -86,6 +88,41 @@ const QuestionFormModal = ({
             optionType="button"
             buttonStyle="solid"
           />
+        </Item>
+        <Item label="Odpowiedzi">
+          <Form.List name="answers">
+            {(fields, { add, remove }) => (
+              <div className={styles["awswers-grid"]}>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Item
+                    key={key}
+                    {...restField}
+                    name={[name, "content"]}
+                    rules={[
+                      { required: true, message: "Treść jest wymagana" },
+                      { min: 1, message: "Treść jest wymagana" },
+                    ]}
+                  >
+                    <Input
+                      addonAfter={
+                        <MinusCircleOutlined
+                          onClick={() => {
+                            remove(name);
+                          }}
+                        />
+                      }
+                    />
+                  </Item>
+                ))}
+                {fields.length < 6 ? (
+                  <Button type="dashed" onClick={() => add()}>
+                    <PlusOutlined />
+                    Dodaj odpowiedź
+                  </Button>
+                ) : null}
+              </div>
+            )}
+          </Form.List>
         </Item>
       </Form>
     </Modal>
