@@ -1,4 +1,4 @@
-import { Button, Flex, Modal, Form, Input, Radio } from "antd";
+import { Button, Flex, Modal, Form, Input, Radio, Checkbox } from "antd";
 import { createSchemaFieldRule } from "antd-zod";
 import {
   QuestionFormDataType,
@@ -73,7 +73,7 @@ const QuestionFormModal = ({
         initialValues={{
           content: undefined,
           type: "single",
-          answers: [{}, {}],
+          answers: [{ isCorrect: false }, { isCorrect: false }],
         }}
       >
         <Item label="Treść" name="content" rules={[rule]}>
@@ -89,42 +89,49 @@ const QuestionFormModal = ({
             buttonStyle="solid"
           />
         </Item>
-        <Item label="Odpowiedzi">
-          <Form.List name="answers">
-            {(fields, { add, remove }) => (
-              <div className={styles["awswers-grid"]}>
-                {fields.map(({ key, name, ...restField }) => (
-                  <Item
-                    key={key}
-                    {...restField}
-                    name={[name, "content"]}
-                    rules={[
-                      { required: true, message: "Treść jest wymagana" },
-                      { min: 1, message: "Treść jest wymagana" },
-                    ]}
-                  >
-                    <Input
-                      addonAfter={
-                        <MinusCircleOutlined
-                          onClick={() => {
-                            if (fields.length < 3) return;
-                            remove(name);
-                          }}
-                        />
-                      }
-                    />
-                  </Item>
-                ))}
-                {fields.length < 6 ? (
-                  <Button type="dashed" onClick={() => add()}>
-                    <PlusOutlined />
-                    Dodaj odpowiedź
-                  </Button>
-                ) : null}
-              </div>
-            )}
-          </Form.List>
-        </Item>
+        <Form.List name="answers">
+          {(fields, { add, remove }) => (
+            <div className={styles["awswers-grid"]}>
+              {fields.map(({ key, name, ...restField }) => (
+                <Item
+                  key={key}
+                  {...restField}
+                  name={[name, "content"]}
+                  rules={[
+                    { required: true, message: "Treść jest wymagana" },
+                    { min: 1, message: "Treść jest wymagana" },
+                  ]}
+                >
+                  <Input
+                    addonBefore={
+                      <Item
+                        name={[name, "isCorrect"]}
+                        noStyle
+                        valuePropName="checked"
+                      >
+                        <Checkbox />
+                      </Item>
+                    }
+                    addonAfter={
+                      <MinusCircleOutlined
+                        onClick={() => {
+                          if (fields.length < 3) return;
+                          remove(name);
+                        }}
+                      />
+                    }
+                  />
+                </Item>
+              ))}
+              {fields.length < 6 ? (
+                <Button type="dashed" onClick={() => add()}>
+                  <PlusOutlined />
+                  Dodaj odpowiedź
+                </Button>
+              ) : null}
+            </div>
+          )}
+        </Form.List>
       </Form>
     </Modal>
   );
