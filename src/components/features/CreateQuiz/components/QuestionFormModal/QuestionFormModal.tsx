@@ -5,7 +5,7 @@ import {
   QuestionType,
   QuestionValidationSchema,
 } from "../../types";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import styles from "./QuestionFormModal.module.scss";
 
@@ -28,10 +28,22 @@ const QuestionFormModal = ({
 }: QuestionModalProps) => {
   const [form] = Form.useForm<QuestionFormDataType>();
 
-  const onFinish = (values: QuestionFormDataType) => {
-    onSubmit(values);
+  const onClose = () => {
     form.resetFields();
     closeModal();
+  };
+
+  const handleAnswerCheck = (e: ChangeEvent<HTMLInputElement>, answerIndex: number) => {
+    const {answers, type} = form.getFieldsValue(['answers', 'type']);
+    console.log(answers[answerIndex], type)
+    return e.target.checked
+  }
+
+  const onFinish = (values: QuestionFormDataType) => {
+    console.log(values); return;
+    
+    onSubmit(values);
+    onClose();
   };
 
   useEffect(() => {
@@ -47,11 +59,11 @@ const QuestionFormModal = ({
   return (
     <Modal
       open={isOpen}
-      onCancel={closeModal}
+      onCancel={onClose}
       title="Dodaj pytanie"
       footer={
         <Flex justify="space-between">
-          <Button onClick={closeModal} size="large">
+          <Button onClick={onClose} size="large">
             Anuluj
           </Button>
           <Button
@@ -73,7 +85,10 @@ const QuestionFormModal = ({
         initialValues={{
           content: undefined,
           type: "single",
-          answers: [{ isCorrect: false }, { isCorrect: false }],
+          answers: [
+            { content: "", isCorrect: false },
+            { content: "", isCorrect: false },
+          ],
         }}
       >
         <Item label="Treść" name="content" rules={[rule]}>
@@ -97,6 +112,7 @@ const QuestionFormModal = ({
                   key={key}
                   {...restField}
                   name={[name, "content"]}
+                  initialValue={""}
                   rules={[
                     { required: true, message: "Treść jest wymagana" },
                     { min: 1, message: "Treść jest wymagana" },
@@ -106,8 +122,10 @@ const QuestionFormModal = ({
                     addonBefore={
                       <Item
                         name={[name, "isCorrect"]}
+                        initialValue={false}
                         noStyle
                         valuePropName="checked"
+                        getValueFromEvent={(e) => handleAnswerCheck(e, name)}
                       >
                         <Checkbox />
                       </Item>
