@@ -28,7 +28,7 @@ export const AnswerValidationSchema = z.object({
         .min(1, {
             message: "Treść jest wymagana",
         }),
-    // isCorrect: z.boolean()
+    isCorrect: z.boolean()
 })
 
 export const QuestionValidationSchema = z.object({

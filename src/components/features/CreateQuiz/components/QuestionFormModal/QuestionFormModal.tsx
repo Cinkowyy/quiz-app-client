@@ -33,15 +33,36 @@ const QuestionFormModal = ({
     closeModal();
   };
 
-  const handleAnswerCheck = (e: ChangeEvent<HTMLInputElement>, answerIndex: number) => {
-    const {answers, type} = form.getFieldsValue(['answers', 'type']);
-    console.log(answers[answerIndex], type)
-    return e.target.checked
-  }
+  const handleAnswerCheck = (
+    e: ChangeEvent<HTMLInputElement>,
+    answerIndex: number
+  ) => {
+    const {
+      answers,
+      type,
+    }: {
+      answers: QuestionFormDataType["answers"];
+      type: QuestionFormDataType["type"];
+    } = form.getFieldsValue(["answers", "type"]);
+
+    const changedAnswer = answers[answerIndex];
+    const checked = e.target.checked;
+    if (type === "single") {
+      const clearedAnswers = answers.map((answer) => ({
+        ...answer,
+        isCorrect: false,
+      }));
+      form.setFieldValue("answers", clearedAnswers);
+    }
+
+    console.log(answers[answerIndex], type);
+    return checked;
+  };
 
   const onFinish = (values: QuestionFormDataType) => {
-    console.log(values); return;
-    
+    console.log(values);
+    return;
+
     onSubmit(values);
     onClose();
   };
