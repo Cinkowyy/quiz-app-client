@@ -13,11 +13,7 @@ const { Item } = Form;
 
 const rule = createSchemaFieldRule(QuizDataValidationSchema);
 
-const CreateQuizForm = ({
-  onFormSubmit,
-}: {
-  onFormSubmit: (v: QuizFormDataType) => void;
-}) => {
+const CreateQuizForm = () => {
   const [form] = Form.useForm<QuizFormDataType>();
 
   const { isLoading, data: categoriesList } = useQuery({
@@ -40,16 +36,15 @@ const CreateQuizForm = ({
   });
 
   useEffect(() => {
-
-    if(categoriesList && !form.getFieldValue('category')) form.setFieldValue('category', categoriesList[0].value)
-    
-  }, [categoriesList, form])
+    if (categoriesList && !form.getFieldValue("category"))
+      form.setFieldValue("category", categoriesList[0].value);
+  }, [categoriesList, form]);
 
   return (
     <Form
       form={form}
-      onFinish={onFormSubmit}
-      id="createQuizForm"
+      name="quizForm"
+      id="quizForm"
       size="large"
       initialValues={{
         duration: 20,

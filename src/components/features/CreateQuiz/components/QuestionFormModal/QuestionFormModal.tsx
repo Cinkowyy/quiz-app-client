@@ -16,14 +16,12 @@ const rule = createSchemaFieldRule(QuestionValidationSchema);
 type QuestionModalProps = {
   isOpen: boolean;
   closeModal: () => void;
-  onSubmit: (value: QuestionFormDataType) => void;
   dataToEdit: QuestionType | null;
 };
 
 const QuestionFormModal = ({
   isOpen,
   closeModal,
-  onSubmit,
   dataToEdit,
 }: QuestionModalProps) => {
   const [form] = Form.useForm<QuestionFormDataType>();
@@ -59,14 +57,6 @@ const QuestionFormModal = ({
     return checked;
   };
 
-  const onFinish = (values: QuestionFormDataType) => {
-    console.log(values);
-    return;
-
-    onSubmit(values);
-    onClose();
-  };
-
   useEffect(() => {
     if (!dataToEdit) form.resetFields();
     else
@@ -100,15 +90,15 @@ const QuestionFormModal = ({
     >
       <Form
         id="questionForm"
+        name="questionForm"
         form={form}
         size="large"
-        onFinish={onFinish}
         initialValues={{
           content: undefined,
           type: "single",
           answers: [
-            { content: "", isCorrect: false },
-            { content: "", isCorrect: false },
+            { },
+            { },
           ],
         }}
       >

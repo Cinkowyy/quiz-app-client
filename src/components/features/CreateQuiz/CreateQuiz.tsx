@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { QuizFormDataType, QuestionFormDataType, QuestionType } from "./types";
-import { App, Button, Card, Divider, Flex, Typography } from "antd";
+import {
+  App,
+  Button,
+  Card,
+  Divider,
+  Flex,
+  Form,
+  FormInstance,
+  Typography,
+} from "antd";
 import CreateQuizForm from "./components/CreateQuizForm/CreateQuizForm";
 import QuestionsList from "./components/QuestionsList/QuestionsList";
 import QuestionFormModal from "./components/QuestionFormModal/QuestionFormModal";
@@ -18,7 +27,7 @@ const CreateQuiz = () => {
 
   const addQuestion = (question: QuestionFormDataType) => {
     console.log(question);
-    
+
     setQuestions((prevQuestions) => [
       ...prevQuestions,
       {
@@ -58,15 +67,52 @@ const CreateQuiz = () => {
     setQuestionToEdit(null);
   };
 
-  const onFormSubmit = (values: QuizFormDataType) => {
-    if (questions.length < 5) {
-      message.error({
-        content: "Quiz musi mieć przynajmniej 5 pytań",
-        duration: 5,
+  //TODO: fix typescript
+
+  // type quiz = (
+  //   name: "quizForm",
+  //   { values, forms }: { values: QuizFormDataType; forms: Forms }
+  // ) => void;
+
+  // type question = (
+  //   name: "questionForm",
+  //   { values, forms }: { values: QuestionFormDataType; forms: Forms }
+  // ) => void;
+
+  // type Forms = {
+  //   quizForm: FormInstance<QuizFormDataType>;
+  //   questionForm: FormInstance<QuestionFormDataType>;
+  // } & Record<string, FormInstance>;
+
+  const handleFormFinish = (
+    name: string,
+    {
+      values,
+      forms,
+    }: { values: Record<string, unknown>; forms: Record<string, unknown> }
+  ) => {
+    if (name === "quizForm") {
+      console.log("Obsługa quizForm");
+      if (questions.length < 5) {
+        message.error({
+          content: "Quiz musi mieć przynajmniej 5 pytań",
+          duration: 5,
+        });
+        return;
+      }
+      console.log({
+        ...values,
+        questions,
       });
-      return;
+    } else {
+      console.log("Obsługa questionForm:");
+      const { questionForm } = forms as Record<string, FormInstance>;
+      
+      if (questionToEdit) editQuestion(values as QuestionFormDataType);
+      else addQuestion(values as QuestionFormDataType);
+      questionForm.resetFields();
+      closeModal()
     }
-    console.log(values);
   };
 
   const CardTitle = (
@@ -79,14 +125,14 @@ const CreateQuiz = () => {
   );
 
   return (
-    <>
+    <Form.Provider onFormFinish={handleFormFinish}>
       <Card
         title={CardTitle}
         style={{ height: "fit-content", width: "fit-content" }}
         bordered={false}
       >
         <Flex gap="1rem">
-          <CreateQuizForm onFormSubmit={onFormSubmit} />
+          <CreateQuizForm />
 
           <Divider
             type="vertical"
@@ -105,7 +151,7 @@ const CreateQuiz = () => {
           type="primary"
           size="large"
           htmlType="submit"
-          form="createQuizForm"
+          form="quizForm"
           style={{
             marginLeft: "auto",
             display: "block",
@@ -117,10 +163,9 @@ const CreateQuiz = () => {
       <QuestionFormModal
         isOpen={isOpen}
         closeModal={closeModal}
-        onSubmit={questionToEdit ? editQuestion : addQuestion}
         dataToEdit={questionToEdit}
       />
-    </>
+    </Form.Provider>
   );
 };
 export default CreateQuiz;
