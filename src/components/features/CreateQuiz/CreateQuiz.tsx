@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { QuizFormDataType, QuestionFormDataType, QuestionType } from "./types";
+import { QuestionFormDataType } from "./types";
 import {
   App,
   Button,
@@ -13,52 +13,28 @@ import {
 import CreateQuizForm from "./components/CreateQuizForm/CreateQuizForm";
 import QuestionsList from "./components/QuestionsList/QuestionsList";
 import QuestionFormModal from "./components/QuestionFormModal/QuestionFormModal";
+import useQuizQuestions from "./useQuizQuestions";
 
 const { Text } = Typography;
 
 const CreateQuiz = () => {
-  const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [questionToEdit, setQuestionToEdit] = useState<QuestionType | null>(
-    null
-  );
+
+  const {
+    questions,
+    questionToEdit,
+    addQuestion,
+    editQuestion,
+    setQuestionToEdit,
+    removeQuestion,
+  } = useQuizQuestions();
 
   const { message } = App.useApp();
-
-  const addQuestion = (question: QuestionFormDataType) => {
-    console.log(question);
-
-    setQuestions((prevQuestions) => [
-      ...prevQuestions,
-      {
-        id: Date.now(),
-        ...question,
-      },
-    ]);
-  };
-
-  const editQuestion = (updatedQuestionData: QuestionFormDataType) => {
-    if (!questionToEdit) return;
-    const questionId = questionToEdit.id;
-
-    setQuestions((prevQuestions) =>
-      prevQuestions.map((question) =>
-        question.id === questionId
-          ? { id: questionId, ...updatedQuestionData }
-          : question
-      )
-    );
-    setQuestionToEdit(null);
-  };
 
   const openEditMode = (questionId: number) => {
     const questionToEdit = questions.filter((q) => q.id === questionId)[0];
     setQuestionToEdit(questionToEdit);
     openModal();
-  };
-
-  const removeQuestion = (questionId: number) => {
-    setQuestions((prev) => prev.filter((q) => q.id != questionId));
   };
 
   const openModal = () => setIsOpen(true);
@@ -107,11 +83,11 @@ const CreateQuiz = () => {
     } else {
       console.log("Obsługa questionForm:");
       const { questionForm } = forms as Record<string, FormInstance>;
-      
+
       if (questionToEdit) editQuestion(values as QuestionFormDataType);
       else addQuestion(values as QuestionFormDataType);
       questionForm.resetFields();
-      closeModal()
+      closeModal();
     }
   };
 
