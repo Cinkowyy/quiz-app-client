@@ -43,7 +43,7 @@ const QuestionFormModal = ({
       type: QuestionFormDataType["type"];
     } = form.getFieldsValue(["answers", "type"]);
 
-    const changedAnswer = answers[answerIndex];
+    // const changedAnswer = answers[answerIndex];
     const checked = e.target.checked;
     if (type === "single") {
       const clearedAnswers = answers.map((answer) => ({

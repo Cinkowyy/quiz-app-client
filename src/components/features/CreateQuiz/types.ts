@@ -1,3 +1,4 @@
+import { FormInstance } from "antd";
 import { z } from "zod";
 
 export type CategoryType = {
@@ -28,8 +29,8 @@ export const QuestionValidationSchema = z.object({
     answers: z.array(AnswerValidationSchema),
 });
 
-export type QuestionType= z.infer<typeof QuestionValidationSchema>;
-export type QuestionFormDataType  = Omit<QuestionType, 'id'>
+export type QuestionType = z.infer<typeof QuestionValidationSchema>;
+export type QuestionFormDataType = Omit<QuestionType, 'id'>
 
 export const QuizDataValidationSchema = z.object({
     title: z
@@ -48,3 +49,20 @@ export const QuizDataValidationSchema = z.object({
 });
 
 export type QuizFormDataType = z.infer<typeof QuizDataValidationSchema>;
+
+export type FormNames = "quizForm" | "questionForm";
+
+export type QuizForms = {
+    quizForm: FormInstance<QuizFormDataType>;
+    questionForm: FormInstance<QuestionFormDataType>;
+};
+
+export type QuizValues = QuizFormDataType | QuestionFormDataType;
+
+export type OnFormFinish = (
+    name: FormNames,
+    info: {
+        values: QuizValues;
+        forms: QuizForms;
+    }
+) => void;

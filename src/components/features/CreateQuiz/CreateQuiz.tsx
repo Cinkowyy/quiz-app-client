@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { QuestionFormDataType, QuestionType, QuizFormDataType } from "./types";
+import {
+  FormNames,
+  OnFormFinish,
+  QuestionFormDataType,
+  QuestionType,
+  QuizFormDataType,
+  QuizForms,
+  QuizValues,
+} from "./types";
 import {
   App,
   Button,
@@ -23,6 +31,8 @@ const CreateQuiz = () => {
   const [form] = Form.useForm<QuizFormDataType>();
   const questions = Form.useWatch("questions", form);
 
+  const { message } = App.useApp();
+
   const {
     questionToEdit,
     addQuestion,
@@ -30,8 +40,6 @@ const CreateQuiz = () => {
     setQuestionToEdit,
     removeQuestion,
   } = useQuizQuestions(form);
-
-  const { message } = App.useApp();
 
   const openEditMode = (questionId: number) => {
     const questions: QuestionType[] = form.getFieldValue("questions");
@@ -46,42 +54,53 @@ const CreateQuiz = () => {
     setQuestionToEdit(null);
   };
 
-  type FormNames = "quizForm" | "questionForm";
-
-  type QuizForms = {
-    quizForm: FormInstance<QuizFormDataType>;
-    questionForm: FormInstance<QuestionFormDataType>;
+  const handleQuizSubmit = ({
+    values,
+    form,
+  }: {
+    values: QuizFormDataType;
+    form: FormInstance<QuizFormDataType>;
+  }) => {
+    if (values.questions.length < 5) {
+      message.error({
+        content: "Quiz musi mieć przynajmniej 5 pytań",
+        duration: 5,
+      });
+      return;
+    }
+    console.log(values);
   };
 
-  type QuizValues = QuizFormDataType | QuestionFormDataType;
-
-  type OnFormFinish = (
-    name: FormNames,
-    info: {
-      values: QuizValues;
-      forms: QuizForms;
-    }
-  ) => void;
+  const handleQuestionSubmit = ({
+    values,
+    form,
+  }: {
+    values: QuestionFormDataType;
+    form: FormInstance<QuestionFormDataType>;
+  }) => {
+    if (questionToEdit) editQuestion(values);
+    else addQuestion(values);
+    form.resetFields();
+    closeModal();
+  };
 
   const handleFormFinish: OnFormFinish = (name, { values, forms }) => {
-    if (name === "quizForm") {
-      // @ts-expect-error/ttt
-      if (values.questions.length < 5) {
-        message.error({
-          content: "Quiz musi mieć przynajmniej 5 pytań",
-          duration: 5,
-        });
-        return;
-      }
-      console.log(values);
-    } else {
-      const { questionForm } = forms;
-
-      if (questionToEdit) editQuestion(values as QuestionFormDataType);
-      else addQuestion(values as QuestionFormDataType);
-      questionForm.resetFields();
-      closeModal();
-    }
+    if (name === "quizForm")
+      handleQuizSubmit({
+        values,
+        form: forms.quizForm,
+      } as {
+        values: QuizFormDataType;
+        form: FormInstance<QuizFormDataType>;
+      });
+    else
+      handleQuestionSubmit({
+        values,
+        form: forms.questionForm,
+      } as {
+        values: QuestionFormDataType;
+        form: FormInstance<QuestionFormDataType>;
+      });
   };
 
   const CardTitle = (
