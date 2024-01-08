@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { QuestionFormDataType } from "./types";
+import { QuestionFormDataType, QuizFormDataType } from "./types";
 import {
   App,
   Button,
@@ -43,30 +43,24 @@ const CreateQuiz = () => {
     setQuestionToEdit(null);
   };
 
-  //TODO: fix typescript
+  type FormNames = "quizForm" | "questionForm";
 
-  // type quiz = (
-  //   name: "quizForm",
-  //   { values, forms }: { values: QuizFormDataType; forms: Forms }
-  // ) => void;
+  type QuizForms = {
+    quizForm: FormInstance<QuizFormDataType>;
+    questionForm: FormInstance<QuestionFormDataType>;
+  };
 
-  // type question = (
-  //   name: "questionForm",
-  //   { values, forms }: { values: QuestionFormDataType; forms: Forms }
-  // ) => void;
+  type QuizValues = QuizFormDataType | QuestionFormDataType;
 
-  // type Forms = {
-  //   quizForm: FormInstance<QuizFormDataType>;
-  //   questionForm: FormInstance<QuestionFormDataType>;
-  // } & Record<string, FormInstance>;
+  type OnFormFinish = (
+    name: FormNames,
+    info: {
+      values: QuizValues;
+      forms: QuizForms;
+    }
+  ) => void;
 
-  const handleFormFinish = (
-    name: string,
-    {
-      values,
-      forms,
-    }: { values: Record<string, unknown>; forms: Record<string, unknown> }
-  ) => {
+  const handleFormFinish: OnFormFinish = (name, { values, forms }) => {
     if (name === "quizForm") {
       console.log("Obsługa quizForm");
       if (questions.length < 5) {
@@ -82,7 +76,7 @@ const CreateQuiz = () => {
       });
     } else {
       console.log("Obsługa questionForm:");
-      const { questionForm } = forms as Record<string, FormInstance>;
+      const { questionForm } = forms;
 
       if (questionToEdit) editQuestion(values as QuestionFormDataType);
       else addQuestion(values as QuestionFormDataType);
@@ -101,7 +95,14 @@ const CreateQuiz = () => {
   );
 
   return (
-    <Form.Provider onFormFinish={handleFormFinish}>
+    <Form.Provider
+      onFormFinish={(name, { values, forms }) =>
+        handleFormFinish(
+          name as FormNames,
+          { values, forms } as { values: QuizValues; forms: QuizForms }
+        )
+      }
+    >
       <Card
         title={CardTitle}
         style={{ height: "fit-content", width: "fit-content" }}
