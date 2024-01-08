@@ -1,6 +1,6 @@
 import axios from "@api/axios";
 import { useQuery } from "@tanstack/react-query";
-import { Form, Input, InputNumber, Radio, Select } from "antd";
+import { Form, FormInstance, Input, InputNumber, Radio, Select } from "antd";
 import { createSchemaFieldRule } from "antd-zod";
 import {
   CategoryType,
@@ -13,9 +13,7 @@ const { Item } = Form;
 
 const rule = createSchemaFieldRule(QuizDataValidationSchema);
 
-const CreateQuizForm = () => {
-  const [form] = Form.useForm<QuizFormDataType>();
-
+const CreateQuizForm = ({ form }: { form: FormInstance<QuizFormDataType> }) => {
   const { isLoading, data: categoriesList } = useQuery({
     queryKey: ["categoriesList"],
     queryFn: async () => {
@@ -49,6 +47,7 @@ const CreateQuizForm = () => {
       initialValues={{
         duration: 20,
         visibility: "public",
+        questions: []
       }}
     >
       <Item label="Tytuł" name="title" rules={[rule]}>
@@ -70,6 +69,7 @@ const CreateQuizForm = () => {
       <Item label="Ketegoria" name="category">
         <Select options={categoriesList} loading={isLoading} />
       </Item>
+      <Item name="questions" />
     </Form>
   );
 };

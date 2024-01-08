@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { QuestionFormDataType, QuizFormDataType } from "./types";
+import { QuestionFormDataType, QuestionType, QuizFormDataType } from "./types";
 import {
   App,
   Button,
@@ -20,18 +20,21 @@ const { Text } = Typography;
 const CreateQuiz = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const [form] = Form.useForm<QuizFormDataType>();
+  const questions = Form.useWatch("questions", form);
+
   const {
-    questions,
     questionToEdit,
     addQuestion,
     editQuestion,
     setQuestionToEdit,
     removeQuestion,
-  } = useQuizQuestions();
+  } = useQuizQuestions(form);
 
   const { message } = App.useApp();
 
   const openEditMode = (questionId: number) => {
+    const questions: QuestionType[] = form.getFieldValue("questions");
     const questionToEdit = questions.filter((q) => q.id === questionId)[0];
     setQuestionToEdit(questionToEdit);
     openModal();
@@ -62,20 +65,16 @@ const CreateQuiz = () => {
 
   const handleFormFinish: OnFormFinish = (name, { values, forms }) => {
     if (name === "quizForm") {
-      console.log("Obsługa quizForm");
-      if (questions.length < 5) {
+      // @ts-expect-error/ttt
+      if (values.questions.length < 5) {
         message.error({
           content: "Quiz musi mieć przynajmniej 5 pytań",
           duration: 5,
         });
         return;
       }
-      console.log({
-        ...values,
-        questions,
-      });
+      console.log(values);
     } else {
-      console.log("Obsługa questionForm:");
       const { questionForm } = forms;
 
       if (questionToEdit) editQuestion(values as QuestionFormDataType);
@@ -109,7 +108,7 @@ const CreateQuiz = () => {
         bordered={false}
       >
         <Flex gap="1rem">
-          <CreateQuizForm />
+          <CreateQuizForm form={form} />
 
           <Divider
             type="vertical"

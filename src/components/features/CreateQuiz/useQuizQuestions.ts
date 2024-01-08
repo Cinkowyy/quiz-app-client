@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { QuestionFormDataType, QuestionType } from "./types";
+import { QuestionFormDataType, QuestionType, QuizFormDataType } from "./types";
+import { FormInstance } from "antd";
 
 
-const useQuizQuestions = () => {
-    const [questions, setQuestions] = useState<QuestionType[]>([]);
+const useQuizQuestions = (form: FormInstance<QuizFormDataType>) => {
     const [questionToEdit, setQuestionToEdit] = useState<QuestionType | null>(
         null
     );
@@ -11,35 +11,36 @@ const useQuizQuestions = () => {
     const addQuestion = (question: QuestionFormDataType) => {
         console.log(question);
 
-        setQuestions((prevQuestions) => [
+        const prevQuestions: QuestionType[] = form.getFieldValue('questions')
+        form.setFieldValue('questions', [
             ...prevQuestions,
             {
                 id: Date.now(),
                 ...question,
             },
-        ]);
+        ])
     };
 
     const editQuestion = (updatedQuestionData: QuestionFormDataType) => {
         if (!questionToEdit) return;
         const questionId = questionToEdit.id;
 
-        setQuestions((prevQuestions) =>
-            prevQuestions.map((question) =>
-                question.id === questionId
-                    ? { id: questionId, ...updatedQuestionData }
-                    : question
-            )
-        );
+        const prevQuestions: QuestionType[] = form.getFieldValue('questions')
+        form.setFieldValue('questions', prevQuestions.map((question) =>
+            question.id === questionId
+                ? { id: questionId, ...updatedQuestionData }
+                : question
+        ))
+
         setQuestionToEdit(null);
     };
 
     const removeQuestion = (questionId: number) => {
-        setQuestions((prev) => prev.filter((q) => q.id != questionId));
-      };
+        const prevQuestions: QuestionType[] = form.getFieldValue('questions')
+        form.setFieldValue('questions', prevQuestions.filter((q) => q.id != questionId))
+    };
 
     return {
-        questions,
         questionToEdit,
         addQuestion,
         editQuestion,
