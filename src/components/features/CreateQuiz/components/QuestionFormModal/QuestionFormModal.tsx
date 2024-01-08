@@ -35,13 +35,18 @@ const QuestionFormModal = ({
     e: ChangeEvent<HTMLInputElement>,
     answerIndex: number
   ) => {
-    const {
-      answers,
-      type,
-    }: {
-      answers: QuestionFormDataType["answers"];
-      type: QuestionFormDataType["type"];
-    } = form.getFieldsValue(["answers", "type"]);
+    const { answers, type }: Omit<QuestionFormDataType, "content"> =
+      form.getFieldsValue(["answers", "type"]);
+    const errors = form.getFieldError("answers");
+
+    if (errors.length > 0) {
+      form.setFields([
+        {
+          name: "answers",
+          errors: [],
+        },
+      ]);
+    }
 
     // const changedAnswer = answers[answerIndex];
     const checked = e.target.checked;
@@ -96,10 +101,7 @@ const QuestionFormModal = ({
         initialValues={{
           content: undefined,
           type: "single",
-          answers: [
-            { },
-            { },
-          ],
+          answers: [{}, {}],
         }}
       >
         <Item label="Treść" name="content" rules={[rule]}>
@@ -116,49 +118,54 @@ const QuestionFormModal = ({
           />
         </Item>
         <Form.List name="answers">
-          {(fields, { add, remove }) => (
-            <div className={styles["awswers-grid"]}>
-              {fields.map(({ key, name, ...restField }) => (
-                <Item
-                  key={key}
-                  {...restField}
-                  name={[name, "content"]}
-                  initialValue={""}
-                  rules={[
-                    { required: true, message: "Treść jest wymagana" },
-                    { min: 1, message: "Treść jest wymagana" },
-                  ]}
-                >
-                  <Input
-                    addonBefore={
-                      <Item
-                        name={[name, "isCorrect"]}
-                        initialValue={false}
-                        noStyle
-                        valuePropName="checked"
-                        getValueFromEvent={(e) => handleAnswerCheck(e, name)}
-                      >
-                        <Checkbox />
-                      </Item>
-                    }
-                    addonAfter={
-                      <MinusCircleOutlined
-                        onClick={() => {
-                          if (fields.length < 3) return;
-                          remove(name);
-                        }}
-                      />
-                    }
-                  />
-                </Item>
-              ))}
-              {fields.length < 6 ? (
-                <Button type="dashed" onClick={() => add()}>
-                  <PlusOutlined />
-                  Dodaj odpowiedź
-                </Button>
-              ) : null}
-            </div>
+          {(fields, { add, remove }, { errors }) => (
+            <>
+              <div className={styles["awswers-grid"]}>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Item
+                    key={key}
+                    {...restField}
+                    name={[name, "content"]}
+                    initialValue={""}
+                    rules={[
+                      { required: true, message: "Treść jest wymagana" },
+                      { min: 1, message: "Treść jest wymagana" },
+                    ]}
+                  >
+                    <Input
+                      addonBefore={
+                        <Item
+                          name={[name, "isCorrect"]}
+                          initialValue={false}
+                          noStyle
+                          valuePropName="checked"
+                          getValueFromEvent={(e) => handleAnswerCheck(e, name)}
+                        >
+                          <Checkbox />
+                        </Item>
+                      }
+                      addonAfter={
+                        <MinusCircleOutlined
+                          onClick={() => {
+                            if (fields.length < 3) return;
+                            remove(name);
+                          }}
+                        />
+                      }
+                    />
+                  </Item>
+                ))}
+                {fields.length < 6 ? (
+                  <Button type="dashed" onClick={() => add()}>
+                    <PlusOutlined />
+                    Dodaj odpowiedź
+                  </Button>
+                ) : null}
+              </div>
+              <Item style={{ marginBottom: 0 }}>
+                <Form.ErrorList errors={errors} />
+              </Item>
+            </>
           )}
         </Form.List>
       </Form>

@@ -78,6 +78,25 @@ const CreateQuiz = () => {
     values: QuestionFormDataType;
     form: FormInstance<QuestionFormDataType>;
   }) => {
+    const correctCount = values.answers.filter(
+      (answer) => answer?.isCorrect
+    ).length;
+    let error = null;
+    if (values.type == "single" && correctCount != 1)
+      error = "Jedna z odpowiedzi musi być zaznaczona";
+    else if (values.type == "multi" && correctCount < 2)
+      error = "Co najmniej 2 odpowiedzi muszą być zaznaczone";
+
+    if (error) {
+      form.setFields([
+        {
+          name: "answers",
+          errors: [error],
+        },
+      ]);
+      return;
+    }
+
     if (questionToEdit) editQuestion(values);
     else addQuestion(values);
     form.resetFields();

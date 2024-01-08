@@ -25,7 +25,7 @@ export const QuestionValidationSchema = z.object({
         .min(1, {
             message: "Treść jest wymagana",
         }),
-    type: z.enum(["single", "mutli"]),
+    type: z.enum(["single", "multi"]),
     answers: z.array(AnswerValidationSchema),
 });
 
