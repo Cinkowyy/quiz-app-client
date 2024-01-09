@@ -1,12 +1,9 @@
 import { useState } from "react";
 import {
-  FormNames,
   OnFormFinish,
   QuestionFormDataType,
   QuestionType,
   QuizFormDataType,
-  QuizForms,
-  QuizValues,
 } from "./types";
 import {
   App,
@@ -103,22 +100,16 @@ const CreateQuiz = () => {
     closeModal();
   };
 
-  const handleFormFinish: OnFormFinish = (name, { values, forms }) => {
+  const handleFormFinish: OnFormFinish = ({ name, values, forms }) => {
     if (name === "quizForm")
       handleQuizSubmit({
         values,
         form: forms.quizForm,
-      } as {
-        values: QuizFormDataType;
-        form: FormInstance<QuizFormDataType>;
       });
     else
       handleQuestionSubmit({
         values,
         form: forms.questionForm,
-      } as {
-        values: QuestionFormDataType;
-        form: FormInstance<QuestionFormDataType>;
       });
   };
 
@@ -134,10 +125,11 @@ const CreateQuiz = () => {
   return (
     <Form.Provider
       onFormFinish={(name, { values, forms }) =>
-        handleFormFinish(
-          name as FormNames,
-          { values, forms } as { values: QuizValues; forms: QuizForms }
-        )
+        handleFormFinish({
+          name,
+          values,
+          forms,
+        } as never)
       }
     >
       <Card

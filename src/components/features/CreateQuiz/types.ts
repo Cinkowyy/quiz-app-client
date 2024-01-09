@@ -59,10 +59,16 @@ export type QuizForms = {
 
 export type QuizValues = QuizFormDataType | QuestionFormDataType;
 
+type OnFormFinishParam = {
+    name: 'quizForm';
+    values: QuizFormDataType;
+    forms: QuizForms
+} | {
+    name: 'questionForm';
+    values: QuestionFormDataType;
+    forms: QuizForms
+}
+
 export type OnFormFinish = (
-    name: FormNames,
-    info: {
-        values: QuizValues;
-        forms: QuizForms;
-    }
+    info: OnFormFinishParam
 ) => void;

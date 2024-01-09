@@ -69,7 +69,7 @@ const CreateQuizForm = ({ form }: { form: FormInstance<QuizFormDataType> }) => {
       <Item label="Ketegoria" name="category">
         <Select options={categoriesList} loading={isLoading} />
       </Item>
-      <Item name="questions" />
+      <Item name="questions" hidden/>
     </Form>
   );
 };
