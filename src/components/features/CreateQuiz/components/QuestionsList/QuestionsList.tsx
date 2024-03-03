@@ -22,7 +22,7 @@ const QuestionsList = ({
       locale={{ emptyText: "Brak pytań" }}
       dataSource={questions}
       renderItem={(question) => (
-        <List.Item style={{ paddingInline: 0 }}>
+        <List.Item style={{ paddingInline: 0, maxHeight: '400px', overflowY: 'auto' }}>
           <Flex
             align="center"
             justify="space-between"

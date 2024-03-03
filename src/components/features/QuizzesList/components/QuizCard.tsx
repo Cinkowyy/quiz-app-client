@@ -5,6 +5,7 @@ import {
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { QuizType } from "../types";
+import { Link } from "react-router-dom";
 
 const { Text, Title } = Typography;
 const QuizCard = ({ quiz }: { quiz: QuizType }) => {
@@ -51,16 +52,18 @@ const QuizCard = ({ quiz }: { quiz: QuizType }) => {
           </Flex>
         </Flex>
       </Flex>
-      <Button
-        size="middle"
-        style={{
-          width: "100%",
-          marginTop: "1rem",
-        }}
-        type="primary"
-      >
-        Uruchom quiz
-      </Button>
+      <Link to={"/quiz/" + quiz.id}>
+        <Button
+          size="middle"
+          style={{
+            width: "100%",
+            marginTop: "1rem",
+          }}
+          type="primary"
+        >
+          Uruchom quiz
+        </Button>
+      </Link>
     </Card>
   );
 };

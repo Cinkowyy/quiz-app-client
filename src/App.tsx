@@ -9,6 +9,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import UserHomePage from "./pages/UserHomePage/UserHomePage";
 import QuizzesListPage from "./pages/QuizzesList/QuizzesListPage";
 import CreateQuizPage from "./pages/CreateQuizPage/CreateQuizPage";
+import SolveQuizPage from "./pages/SolveQuizPage/SolveQuizPage";
 
 const themeConfig = {
   components: {
@@ -62,6 +63,15 @@ function App() {
                   <ProtectedRoute
                     userRoute={<CreateQuizPage />}
                     guestRoute={<Navigate to="/sign-in" />}
+                  />
+                }
+              />
+              <Route
+                path="/quiz/:quizId"
+                element={
+                  <ProtectedRoute
+                    userRoute={<SolveQuizPage />}
+                    guestRoute={<SolveQuizPage />}
                   />
                 }
               />

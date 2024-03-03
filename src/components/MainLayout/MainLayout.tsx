@@ -1,5 +1,5 @@
 import { Button, Flex, Layout } from "antd";
-import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
+import useBreakpoint from "antd/lib/grid/hooks/useBreakpoint";
 import { Outlet } from "react-router-dom";
 import styles from "./MainLayout.module.scss";
 import { Link } from "react-router-dom";
@@ -52,9 +52,7 @@ const MainLayout = () => {
         </Flex>
       </Sider>
       <Layout>
-        <Header className={styles["header"]}>
-          Breadcrumbs
-        </Header>
+        <Header className={styles["header"]}>Breadcrumbs</Header>
         <Content className={styles["content"]}>
           <Outlet />
         </Content>

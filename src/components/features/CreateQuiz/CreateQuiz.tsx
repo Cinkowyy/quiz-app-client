@@ -19,6 +19,9 @@ import CreateQuizForm from "./components/CreateQuizForm/CreateQuizForm";
 import QuestionsList from "./components/QuestionsList/QuestionsList";
 import QuestionFormModal from "./components/QuestionFormModal/QuestionFormModal";
 import useQuizQuestions from "./useQuizQuestions";
+import { useMutation } from "@tanstack/react-query";
+import axios from "@/api/axios";
+import useSessionContext from "@/hooks/useSessionContext";
 
 const { Text } = Typography;
 
@@ -29,6 +32,8 @@ const CreateQuiz = () => {
   const questions = Form.useWatch("questions", form);
 
   const { message } = App.useApp();
+
+  const { authData } = useSessionContext();
 
   const {
     questionToEdit,
@@ -51,6 +56,27 @@ const CreateQuiz = () => {
     setQuestionToEdit(null);
   };
 
+  const { mutate: createQuiz } = useMutation({
+    mutationFn: async (quizData: QuizFormDataType) =>
+      await axios.post(
+        "/quizzes/createQuiz",
+        { ...quizData, categoryId: quizData.category },
+        {
+          headers: {
+            Authorization: "Bearer " + authData?.accessToken,
+          },
+        }
+      ),
+    onError: (error) => console.log(error),
+    onSuccess: () => {
+      form.resetFields()
+      message.success({
+        content: "Quiz został dodany",
+        duration: 5,
+      });
+    },
+  });
+
   const handleQuizSubmit = ({
     values,
     form,
@@ -66,6 +92,7 @@ const CreateQuiz = () => {
       return;
     }
     console.log(values);
+    createQuiz(values);
   };
 
   const handleQuestionSubmit = ({

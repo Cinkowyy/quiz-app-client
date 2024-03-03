@@ -1,14 +1,18 @@
-import { Button, Card } from "antd";
+import { Button, Card, Typography } from "antd";
 import useSessionContext from "@/hooks/useSessionContext";
 
+const { Title } = Typography;
+
 const UserHomePage = () => {
-  const { logoutMutation } = useSessionContext();
+  const { logoutMutation, user } = useSessionContext();
 
   const { isPending, mutate: logout } = logoutMutation;
 
   return (
-    <Card bordered={false}>
-      <h2>Witaj w QuizzesApp</h2>
+    <Card bordered={false} style={{ width: "fit-content", minWidth: "400px" }}>
+      <Title level={2} style={{ marginTop: 0 }}>
+        Witaj {user?.nickname}
+      </Title>
       <Button loading={isPending} onClick={() => logout()} type="primary">
         Wyloguj się
       </Button>
