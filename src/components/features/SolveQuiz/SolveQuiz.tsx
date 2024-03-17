@@ -62,7 +62,7 @@ const SolveQuiz = ({ quizId }: { quizId: string }) => {
           title={
             <Flex style={{ width: "100%" }} justify="space-between">
               <Text>{quizData.title}</Text>
-              <Text>19:23</Text>
+              <Text>7:34</Text>
             </Flex>
           }
         >
@@ -96,7 +96,23 @@ const SolveQuiz = ({ quizId }: { quizId: string }) => {
               </Button>
             </>
           ) : (
-            <p>Lista odpowiedzi</p>
+            <>
+            <Text style={{fontSize: 16}}>
+              Gratulacje! Udało Ci sie ukończyć quiz w <b>12min 26s</b>! <br/>
+              Twój wynik to <b>11/14</b> punktów
+            </Text>
+            <Button
+              type="primary"
+              size="large"
+              style={{
+                marginTop: "16px",
+                marginLeft: "auto",
+                display: "block",
+              }}
+            >
+              Wróć do listy quizów
+            </Button>
+          </>
           )}
         </Card>
       ) : null}
